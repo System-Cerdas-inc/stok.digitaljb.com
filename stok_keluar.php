@@ -65,16 +65,10 @@ if (!login_check()) {
             if ($search != null || $search != "") {
             ?>
               <li> <a href="<?php echo $halaman; ?>">Data <?php echo $dataapa ?></a></li>
-              <li class="active"><?php
-                                  echo $search;
-                                  ?></li>
-            <?php
-            } else {
-            ?>
+              <li class="active"><?php echo $search; ?></li>
+            <?php } else { ?>
               <li class="active">Data <?php echo $dataapa ?></li>
-            <?php
-            }
-            ?>
+            <?php } ?>
           </ol>
 
           <!-- BREADCRUMB -->

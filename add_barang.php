@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <?php
-// include "configuration/config_etc.php";
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+include "configuration/config_etc.php";
 include "configuration/config_include.php";
 etc();
 encryption();
@@ -298,10 +302,10 @@ if (!login_check()) {
 
                                 <?php } else { ?>
 
-                                  <tr>
+                                  <tr hidden>
                                     <td>Stok Sekarang</td>
                                     <td>:</td>
-                                    <td><input class="form-control" name="stok" type="number" min="1" required> </td>
+                                    <td><input class="form-control" name="stok" type="number" min="1"> </td>
                                   </tr>
 
                                   <tr>
@@ -492,9 +496,10 @@ if (!login_check()) {
           $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
           $satuan = mysqli_real_escape_string($conn, $_POST["satuan"]);
           $kategori = mysqli_real_escape_string($conn, $_POST["kategori"]);
-          $hargabeli = mysqli_real_escape_string($conn, $_POST["harga_beli"]);
-          $hargajual = mysqli_real_escape_string($conn, $_POST["harga_jual"]);
-          $stok = mysqli_real_escape_string($conn, $_POST["stok"]);
+          // $hargabeli = mysqli_real_escape_string($conn, $_POST["harga_beli"]);
+          // $hargajual = mysqli_real_escape_string($conn, $_POST["harga_jual"]);
+          $hargabeli = 0;
+          $hargajual = 0;
           $stokmin = mysqli_real_escape_string($conn, $_POST["stok_minimal"]);
 
           $ukuran = mysqli_real_escape_string($conn, $_POST["ukuran"]);
@@ -512,9 +517,13 @@ if (!login_check()) {
           $avatar = "dist/upload/" . $namaavatar;
           $insert = ($_POST["insert"]);
 
+          //check stok
+          $stok_barang = mysqli_query($conn, "SELECT SUM(jumlah_masuk) AS jml FROM barang_detil WHERE id_barang = '$sku';");
+          $row_stok_barang = mysqli_fetch_array($stok_barang);
+          // $stok = mysqli_real_escape_string($conn, $_POST["stok"]);
+          $stok_new = $row_stok_barang['jml'];
 
-
-          $sql = "select * from $tabeldatabase where kode='$kode'";
+          $sql = "SELECT * from $tabeldatabase where kode='$kode'";
           $result = mysqli_query($conn, $sql);
 
           if (mysqli_num_rows($result) > 0) {
@@ -549,9 +558,9 @@ if (!login_check()) {
             }
           } else if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
             // move_uploaded_file($tmp, $avatar);
-            $sql2 = "insert into barang (kode, sku, nama, hargabeli, hargajual, keterangan, kategori, satuan, terjual, terbeli, sisa, stokmin, barcode, brand, lokasi, expired, warna, ukuran, avatar) 
-values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', $stok, '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');
-";
+            $sql2 = "INSERT into barang (kode, sku, nama, hargabeli, hargajual, keterangan, kategori, satuan, terjual, terbeli, sisa, stokmin, barcode, brand, lokasi, expired, warna, ukuran, avatar) 
+              values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', '$stok_new', '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
+            // echo $sql2;
             $res_sql2 = mysqli_query($conn, $sql2);
             // echo "<script type='text/javascript'>  alert('" . $res_sql2 . "'); </script>";
             if ($res_sql2) {
@@ -559,7 +568,7 @@ values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', $sto
               echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
             } else {
               $avatar = "dist/upload/index.jpg";
-              $sql2 = "insert into $tabeldatabase values('$kode','$sku','$nama','$hargabeli','$hargajual','$ket','$kategori','$satuan','0','0','$stok','$stokmin','$barcode','$brand','$rak','$exp','$warna','$ukuran','$avatar','')";
+              $sql2 = "INSERT into $tabeldatabase values('$kode','$sku','$nama','$hargabeli','$hargajual','$ket','$kategori','$satuan','0','0','$stok_new','$stokmin','$barcode','$brand','$rak','$exp','$warna','$ukuran','$avatar','')";
               if ($res_sql2) {
                 echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
                 echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";

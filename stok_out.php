@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <?php
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
+// ini_set('display_errors', '1');
+// ini_set('display_startup_errors', '1');
+// error_reporting(E_ALL);
 
 include "configuration/config_etc.php";
 include "configuration/config_include.php";
@@ -179,7 +179,7 @@ if (!login_check()) {
                   $total = (int)$jumlah * (int)$hjual;
                   $modal = (int)$jumlah * (int)$hbeli;
 
-                  $sql2 = "insert into stok_keluar_daftar values( '$nota','$kode','$nama','$bc','$jumlah','$modal','$total', 0)";
+                  $sql2 = "insert into stok_keluar_daftar values( '$nota','$kode','$nama','$bc','$jumlah','0','$modal','$total', 0)";
                   $insertan = mysqli_query($conn, $sql2);
 
                   if ($insertan) {
@@ -319,7 +319,7 @@ if (!login_check()) {
                           <label for="barang" class="col-sm-2 control-label">Nama Produk:</label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" readonly id="nama" name="nama" value="<?php echo $nama; ?>">
-                            <input type="text" class="form-control" readonly id="kode" name="kode" value="<?php echo $kode; ?>">
+                            <input type="text" hidden class="form-control" readonly id="kode" name="kode" value="<?php echo $kode; ?>">
                             <input type="text" hidden class="form-control" readonly id="nota" name="nota" value="<?php echo autoNumber(); ?>">
                             <input type="hidden" class="form-control" readonly id="bc" name="bc" value="<?php echo $bc; ?>">
                           </div>

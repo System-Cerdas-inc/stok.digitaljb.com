@@ -43,7 +43,7 @@ if ($con == 'show_table') {
             echo "gagal";
         }
     } else {
-        $sql2 = "insert into barang_detil (id_barang, barcode, jumlah_masuk) values('$kode','$barcode','$stok')";
+        $sql2 = "insert into barang_detil (id_barang, barcode, jumlah_masuk, terjual, terbeli) values('$kode','$barcode','$stok', '0', '0')";
         $insert = mysqli_query($conn, $sql2);
         if ($insert) {
             echo "berhasil";

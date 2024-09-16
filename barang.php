@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-// include "configuration/config_etc.php";
+include "configuration/config_etc.php";
 include "configuration/config_include.php";
 etc();
 encryption();
