@@ -377,6 +377,7 @@ if (!login_check()) {
                             </div>
                           </div>
                           <br>
+                          <button class="btn btn-info" type="button" onclick="buat_barcode();" style="margin-right: 10px;">Buat Barcode Baru</button>
                           <button class="btn btn-primary" type="button" onclick="tambah_barcode();">Tambah Barcode</button>
 
                           <div class="table-responsive">
@@ -647,6 +648,18 @@ if (!login_check()) {
         }
       });
     }
+  }
+
+  function buat_barcode() {
+    // Mengambil elemen input berdasarkan name
+    const inputElements = document.getElementsByName('barcode');
+
+    // Karena getElementsByName mengembalikan NodeList, kita akses elemen pertama
+    const inputElement = inputElements[0];
+
+    // Mendapatkan nilai dari elemen input
+    const inputValue = inputElement.value;
+    $('#result').val(inputValue);
   }
 
   function edit_barcode(barcode, stok) {
