@@ -170,7 +170,7 @@ if (!login_check()) {
                     <div class="nav-tabs-custom nav-fill">
                       <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_1" data-toggle="tab">Standard</a></li>
-                        <li><a href="#tab_2" data-toggle="tab">Barcode</a></li>
+                        <li><a href="#tab_2" data-toggle="tab">Serial Number</a></li>
                         <li><a href="#tab_3" data-toggle="tab">Advanced</a></li>
 
                       </ul>
@@ -203,7 +203,7 @@ if (!login_check()) {
                                 <tr>
                                   <td>Nama Barang</td>
                                   <td>:</td>
-                                  <td><input class="form-control" name="nama" maxlength="200" autocomplete="off" value="<?php echo $w['nama']; ?>"> </td>
+                                  <td><input class="form-control" required name="nama" maxlength="200" autocomplete="off" value="<?php echo $w['nama']; ?>"> </td>
                                 </tr>
 
 
@@ -295,7 +295,7 @@ if (!login_check()) {
                                   </tr>
 
                                   <tr>
-                                    <td>Barcode</td>
+                                    <td>Serial Number</td>
                                     <td>:</td>
                                     <td><input class="form-control" name="barcode" value="<?php echo $w['barcode']; ?>" required readonly> </td>
                                   </tr>
@@ -315,7 +315,7 @@ if (!login_check()) {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td>Barcode</td>
+                                    <td>Serial Number</td>
                                     <td>:</td>
                                     <td><input class="form-control" name="barcode" value="BRG<?php echo autoNumber(); ?>" required readonly> </td>
                                   </tr>
@@ -348,53 +348,51 @@ if (!login_check()) {
                         </div>
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="tab_2">
-                          <div>
-                            <button class="btn btn-info" type="button" id="startButton">Open Kamera</button>
-                            <button class="btn btn-info" type="button" id="resetButton">Reset</button>
-                          </div>
-                          <br>
-                          <div>
-                            <video id="video" width="300" height="200" style="border: 1px solid gray"></video>
-                          </div>
+                          <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                              <div>
+                                <button class="btn btn-info" type="button" id="startButton">Open Kamera</button>
+                                <button class="btn btn-info" type="button" id="resetButton">Reset</button>
+                              </div>
+                              <br>
+                              <div>
+                                <video id="video" width="300" height="200" style="border: 1px solid gray"></video>
+                              </div>
 
-                          <div id="sourceSelectPanel" style="display:none">
-                            <label for="sourceSelect">Ubah kamera:</label>
-                            <select id="sourceSelect" style="max-width:400px">
-                            </select>
-                          </div>
+                              <div id="sourceSelectPanel" style="display:none">
+                                <label for="sourceSelect">Ubah kamera:</label>
+                                <select id="sourceSelect" style="max-width:400px">
+                                </select>
+                              </div>
+                            </div>
 
-                          <!-- <label>Result:</label>
+                            <!-- <label>Result:</label>
                           <pre><code id="result"></code></pre> -->
 
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <label for="result" class="form-label">Barcode</label>
+                            <div class="col-md-6 col-sm-12">
+                              <label for="result" class="form-label">Serial Number</label>
+                              <input type="hidden" class="form-control" id="serialNumber" name="serialNumber">
                               <input class="form-control" id="result">
-                            </div>
-                            <div class="col-sm-6">
-                              <label for="stok_barang" class="form-label">Stok</label>
-                              <input type="number" class="form-control" id="stok_barang" value="1">
+                              <br>
+                              <div id="button-act-sn">
+                                <button class="btn btn-primary" type="button" onclick="tambah_barcode();">Input Serial Number</button>
+                              </div>
+                              <div class="table-responsive">
+                                <table class="table table-dark table-hover" style="width: 100%; margin-top: 20px;">
+                                  <thead>
+                                    <tr>
+                                      <th>No</th>
+                                      <th>Serial Number</th>
+                                      <th>Aksi</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody id="data-body">
+                                    <!-- Data akan dimuat di sini secara dinamis -->
+                                  </tbody>
+                                </table>
+                              </div>
                             </div>
                           </div>
-                          <br>
-                          <button class="btn btn-primary" type="button" onclick="tambah_barcode();">Tambah Barcode</button>
-
-                          <div class="table-responsive">
-                            <table class="table table-dark table-hover" style="width: 100%; margin-top: 20px;">
-                              <thead>
-                                <tr>
-                                  <th>No</th>
-                                  <th>Barcode</th>
-                                  <th>Stok</th>
-                                  <th>Aksi</th>
-                                </tr>
-                              </thead>
-                              <tbody id="data-body">
-                                <!-- Data akan dimuat di sini secara dinamis -->
-                              </tbody>
-                            </table>
-                          </div>
-
                         </div>
                         <div class="tab-pane" id="tab_3">
                           <div class="row">
@@ -628,18 +626,18 @@ if (!login_check()) {
 
   function tambah_barcode() {
     var kode = document.getElementById('sku').value;
-    var stok_barang = document.getElementById('stok_barang').value;
     var result = document.getElementById('result').value;
 
     if (result == '') {
-      alert('Barcode tidak boleh kosong');
+      alert('Serial Number tidak boleh kosong');
     } else {
       $.ajax({
-        url: 'add_barang_action.php?con=simpan&kode=' + kode + '&barcode=' + result + '&stok=' + stok_barang,
+        url: 'add_barang_action.php?con=simpan&kode=' + kode + '&barcode=' + result + '&stok=0',
         type: 'GET',
         success: function(data) {
           if (data === 'berhasil') {
             table_show();
+            $('#result').val(null);
             alert('Data barcode berhasil disimpan.');
           } else {
             alert('Data barcode gagal disimpan, coba lagi!');
@@ -649,9 +647,48 @@ if (!login_check()) {
     }
   }
 
+  function buat_barcode() {
+    // Mengambil elemen input berdasarkan name
+    const inputElements = document.getElementsByName('barcode');
+
+    // Karena getElementsByName mengembalikan NodeList, kita akses elemen pertama
+    const inputElement = inputElements[0];
+
+    // Mendapatkan nilai dari elemen input
+    const inputValue = inputElement.value;
+    $('#result').val(inputValue);
+  }
+
+  function ubah_barcode() {
+    var kode = document.getElementById('serialNumber').value;
+    var result = document.getElementById('result').value;
+
+    if (result == '') {
+      alert('Serial Number tidak boleh kosong');
+    } else {
+      $.ajax({
+        url: 'add_barang_action.php?con=ubah_barcode&kode=' + kode + '&barcode=' + result + '&stok=0',
+        type: 'GET',
+        success: function(data) {
+          if (data === 'berhasil') {
+            table_show();
+            let html = '<button class="btn btn-primary" type="button" onclick="tambah_barcode();">Input Serial Number</button>';
+            $('#button-act-sn').html(html);
+            $('#result').val(null);
+            alert('Data barcode berhasil diubah.');
+          } else {
+            alert('Data barcode gagal diubah, coba lagi!');
+          }
+        }
+      });
+    }
+  }
+
   function edit_barcode(barcode, stok) {
     $('#result').val(barcode);
-    $('#stok_barang').val(stok);
+    $('#serialNumber').val(barcode);
+    let html = '<button class="btn btn-warning" type="button" onclick="ubah_barcode();">Ubah Serial Number</button>';
+    $('#button-act-sn').html(html);
   }
 
   function hapus_barcode(id) {

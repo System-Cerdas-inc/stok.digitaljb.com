@@ -23,7 +23,6 @@ $avatar = $row['avatar'];
                             
                         </div>
                     </div>
-<br>
                              <ul class="sidebar-menu">
                        <!-- <li class="header">MENU UTAMA</li> -->
                         <li class="treeview">
