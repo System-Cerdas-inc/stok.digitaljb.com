@@ -315,7 +315,7 @@ if (!login_check()) {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td>Serial Number</td>
+                                    <td>Barcode</td>
                                     <td>:</td>
                                     <td><input class="form-control" name="barcode" value="BRG<?php echo autoNumber(); ?>" required readonly> </td>
                                   </tr>
@@ -560,10 +560,26 @@ if (!login_check()) {
               values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', '$stok_new', '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
             // echo $sql2;
             $res_sql2 = mysqli_query($conn, $sql2);
+
+            $sql_c = "SELECT * from barang_detil where id_barang = '$sku'";
+            $result_c = mysqli_query($conn, $sql_c);
+            $num_rows_c = mysqli_num_rows($result_c);
             // echo "<script type='text/javascript'>  alert('" . $res_sql2 . "'); </script>";
             if ($res_sql2) {
-              echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
-              echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
+              if ($num_rows_c == 0) {
+                $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$sku', '$sku', '0', '0')";
+                $res_sql3 = mysqli_query($conn, $sql3);
+                if ($res_sql3) {
+                  echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
+                  echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
+                } else {
+                  echo "<script type='text/javascript'>  alert('Gagal, Data gagal disimpan!'); </script>";
+                  echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
+                }
+              } else {
+                echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
+                echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
+              }
             } else {
               $avatar = "dist/upload/index.jpg";
               $sql2 = "INSERT into $tabeldatabase values('$kode','$sku','$nama','$hargabeli','$hargajual','$ket','$kategori','$satuan','0','0','$stok_new','$stokmin','$barcode','$brand','$rak','$exp','$warna','$ukuran','$avatar','')";
