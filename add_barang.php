@@ -190,9 +190,11 @@ if (!login_check()) {
                                       <input class="form-control" type="hidden" readonly id="kode" name="kode" value="<?php echo $w['kode']; ?>">
                                       <input class="form-control" type="text" readonly id="sku" name="sku" value="<?php echo $w['sku']; ?>">
 
+                                      <input class="form-control" type="hidden" readonly id="barcode" name="barcode" value="<?php echo $w['barcode']; ?>">
                                     <?php } else { ?>
                                       <input class="form-control" type="hidden" readonly id="kode" name="kode" value="<?php echo autoNumber(); ?>">
                                       <input class="form-control" type="text" readonly id="sku" name="sku" value="SKU<?php echo autoNumber(); ?>">
+                                      <input class="form-control" type="hidden" readonly id="barcode" name="barcode" value="<?php echo $w['barcode']; ?>">
                                     <?php } ?>
                                   </td>
                                 </tr>
@@ -567,7 +569,7 @@ if (!login_check()) {
             // echo "<script type='text/javascript'>  alert('" . $res_sql2 . "'); </script>";
             if ($res_sql2) {
               if ($num_rows_c == 0) {
-                $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$sku', '$sku', '0', '0')";
+                $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$barcode', '$barcode', '0', '0')";
                 $res_sql3 = mysqli_query($conn, $sql3);
                 if ($res_sql3) {
                   echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
@@ -630,7 +632,7 @@ if (!login_check()) {
   });
 
   function table_show() {
-    var kode = document.getElementById('sku').value;
+    var kode = document.getElementById('barcode').value;
     $.ajax({
       url: 'add_barang_action.php?con=show_table&kode=' + kode,
       type: 'GET',

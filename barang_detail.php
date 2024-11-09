@@ -283,7 +283,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
 
 
 
-                        <div class="box-body col-md-10">
+                        <div class="box-body col-md-12">
 
                 
 
