@@ -154,7 +154,7 @@ if (!login_check()) {
 
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Tambah Barang</h3>
+                  <h3 class="box-title">Edit Barang</h3>
 
                   <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -188,13 +188,13 @@ if (!login_check()) {
                                     <?php if (isset($id) && $id != '') { ?>
 
                                       <input class="form-control" type="hidden" readonly id="kode" name="kode" value="<?php echo $w['kode']; ?>">
+                                      <input class="form-control" type="hidden" readonly id="barcode" name="barcode" value="<?php echo $w['barcode']; ?>">
                                       <input class="form-control" type="text" readonly id="sku" name="sku" value="<?php echo $w['sku']; ?>">
 
-                                      <input class="form-control" type="hidden" readonly id="barcode" name="barcode" value="<?php echo $w['barcode']; ?>">
                                     <?php } else { ?>
                                       <input class="form-control" type="hidden" readonly id="kode" name="kode" value="<?php echo autoNumber(); ?>">
-                                      <input class="form-control" type="text" readonly id="sku" name="sku" value="SKU<?php echo autoNumber(); ?>">
                                       <input class="form-control" type="hidden" readonly id="barcode" name="barcode" value="<?php echo $w['barcode']; ?>">
+                                      <input class="form-control" type="text" readonly id="sku" name="sku" value="SKU<?php echo autoNumber(); ?>">
                                     <?php } ?>
                                   </td>
                                 </tr>
@@ -569,7 +569,7 @@ if (!login_check()) {
             // echo "<script type='text/javascript'>  alert('" . $res_sql2 . "'); </script>";
             if ($res_sql2) {
               if ($num_rows_c == 0) {
-                $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$barcode', '$barcode', '0', '0')";
+                $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$sku', '$sku', '0', '0')";
                 $res_sql3 = mysqli_query($conn, $sql3);
                 if ($res_sql3) {
                   echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
@@ -643,7 +643,7 @@ if (!login_check()) {
   }
 
   function tambah_barcode() {
-    var kode = document.getElementById('sku').value;
+    var kode = document.getElementById('barcode').value;
     var result = document.getElementById('result').value;
 
     if (result == '') {

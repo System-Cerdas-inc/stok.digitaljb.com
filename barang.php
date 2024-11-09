@@ -175,7 +175,7 @@ if (!login_check()) {
 
 
                         <?php if ($chmod >= 3 || $_SESSION['jabatan'] == 'admin') { ?>
-                          <button type="button" class="btn btn-success btn-xs" onclick="window.location.href='add_<?php echo $halaman; ?>?q=<?php echo $fill['no']; ?>'"><i class='fa fa-edit'></i></button>
+                          <button type="button" class="btn btn-success btn-xs" onclick="window.location.href='edit_<?php echo $halaman; ?>?q=<?php echo $fill['no']; ?>'"><i class='fa fa-edit'></i></button>
                         <?php } else {
                         } ?>
 
