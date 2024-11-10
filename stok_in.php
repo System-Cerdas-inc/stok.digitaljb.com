@@ -99,19 +99,47 @@ if (!login_check()) {
 
           <?php
           //fungsi menangkap barcode
-
+          $check_data = 'hidden';
           if (isset($_GET['barcode'])) {
-            $barcode = mysqli_real_escape_string($conn, $_GET["barcode"]);
-            $sql1 = "SELECT nama, kode, sisa, jumlah_masuk, a.barcode, a.id FROM barang_detil a, barang b where a.id_barang = b.sku AND a.barcode='$barcode'";
-            $query = mysqli_query($conn, $sql1);
-            $data = mysqli_fetch_assoc($query);
-            $nama = $data['nama'];
-            $kode = $data['id'];
-            $stok = $data['sisa'];
-            $bc = $data['barcode'];
-            $stok_detil = $data['jumlah_masuk'];
+            if (isset($_GET['new_bc'])) {
+              $new_sn = $_GET["new_sn"];
+              $kode_produk = $_GET["produk"];
+              $new_bc = $_GET["barcode"];
 
-            $jumlah = '1';
+              $sql1 = "SELECT `barang`.* FROM `barang` WHERE `barang`.`kode`='$kode_produk'";
+              $que1 = mysqli_query($conn, $sql1);
+              $dat1 = mysqli_fetch_assoc($que1);
+              $id_brg = $dat1["barcode"];
+              $sql2_check = "SELECT `barang_detil`.* FROM `barang_detil` WHERE `barang_detil`.`barcode`='$new_bc'";
+              $que2_check = mysqli_query($conn, $sql2_check);
+              $rows2_check = mysqli_num_rows($que2_check);
+              if ($rows2_check > 0) {
+                echo "<script type='text/javascript'>  alert('Barang dengan barcode $new_bc sudah ada!');</script>";
+                echo "<script type='text/javascript'>window.location = 'stok_in';</script>";
+              } else {
+                $sql2 = "INSERT INTO `barang_detil`(`id_barang`, `barcode`) VALUES ('$id_brg','$new_bc')";
+                $que2 = mysqli_query($conn, $sql2);
+                if ($que2) {
+                  echo "<script type='text/javascript'>  alert('Berhasil menambahkan Serial Number baru'); </script>";
+                  echo "<script type='text/javascript'>window.location = 'stok_in';</script>";
+                } else {
+                  echo "<script type='text/javascript'>  alert('Gagal, Periksa kembali input anda!'); </script>";
+                }
+              }
+            } else {
+              $barcode = mysqli_real_escape_string($conn, $_GET["barcode"]);
+              $sql1 = "SELECT `barang`.nama,`barang`.sisa AS avail, `barang_detil`.* FROM `barang` INNER JOIN `barang_detil` ON `barang_detil`.`id_barang` = `barang`.`barcode` WHERE `barang_detil`.barcode='$barcode'";
+              $query = mysqli_query($conn, $sql1);
+              $data = mysqli_fetch_assoc($query);
+              $check_data = (mysqli_num_rows($query) > 0) ? null : 'hidden';
+              $nama = $data['nama'];
+              $kode = $data['id'];
+              $stok = $data['avail'];
+              $bc = $data['barcode'];
+              $stok_detil = $data['sisa'];
+
+              $jumlah = '1';
+            }
           }
           ?>
           <!-- tambah -->
@@ -174,17 +202,17 @@ if (!login_check()) {
               }
 
               //update barang
-              $q_jml_brg = mysqli_query($conn, "SELECT * FROM barang_detil WHERE barcode='$barcode_new' and id_barang='SKU$kode';");
+              $q_jml_brg = mysqli_query($conn, "SELECT * FROM barang_detil WHERE barcode='$barcode_new';");
               $row_jml_brg = mysqli_fetch_assoc($q_jml_brg);
               if (mysqli_num_rows($q_jml_brg) > 0) {
                 //update stok berdasarkan barcode
                 $jml_br = $row_jml_brg['jumlah_masuk'] + $jumlah;
                 $jml_tb_br = $row_jml_brg['terbeli'] + $jumlah;
 
-                $q_detail_stok = mysqli_query($conn, "UPDATE barang_detil SET jumlah_masuk='$jml_br', terbeli='$jml_tb_br' WHERE id='" . $row_jml_brg['id'] . "';");
+                $q_detail_stok = mysqli_query($conn, "UPDATE barang_detil SET jumlah_masuk_p='$jml_br', terbeli_p='$jml_tb_br' WHERE id='" . $row_jml_brg['id'] . "';");
                 if ($q_detail_stok) {
                   //update jumlah barang all
-                  $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
+                  // $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
                 }
               } else {
                 //cek jumlah barcode pada barang
@@ -195,17 +223,17 @@ if (!login_check()) {
                   $jml_br2 = $row_cek_bc_all['jumlah_masuk'] + $jumlah;
                   $jml_tb_br2 = $row_cek_bc_all['terbeli'] + $jumlah;
 
-                  $q_detail_stok = mysqli_query($conn, "UPDATE barang_detil SET jumlah_masuk='$jml_br2', terbeli='$jml_tb_br2' WHERE id='" . $row_cek_bc_all['id'] . "';");
+                  $q_detail_stok = mysqli_query($conn, "UPDATE barang_detil SET jumlah_masuk_p='$jml_br2', terbeli_p='$jml_tb_br2' WHERE id='" . $row_cek_bc_all['id'] . "';");
                   if ($q_detail_stok) {
                     //update jumlah barang all
-                    $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
+                    // $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
                   }
                 } else {
                   //update stok barcode baru
                   $q_detail_stok = mysqli_query($conn, "INSERT INTO barang_detil (id_barang, barcode, terbeli, jumlah_masuk) VALUES('SKU$kode','$barcode_new','$jumlah','$jumlah')");
                   if ($q_detail_stok) {
                     //update jumlah barang all
-                    $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
+                    // $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
                   }
                 }
               }
@@ -231,7 +259,7 @@ if (!login_check()) {
 
             <!-- KONTEN BODY AWAL -->
             <!-- Default box -->
-            <div class="col-lg-5 col-xs-12">
+            <div class="col-lg-6 col-xs-12">
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Form Stok Masuk</h3>
@@ -260,49 +288,65 @@ if (!login_check()) {
                       <video id="video" width="100%" height="200" style="border: 1px solid gray"></video>
                     </div>
 
-                    <div id="sourceSelectPanel" style="display:none">
-                      <label for="sourceSelect">Ubah kamera:</label>
-                      <select id="sourceSelect" style="max-width:400px">
+                    <div id="sourceSelectPanel" style="display:none" class="form-group">
+                      <select id="sourceSelect" style="col-sm-8" class="form-control">
                       </select>
                     </div>
                     <br>
-
-                    <div class="row">
-                      <div class="form-group col-md-12 col-xs-12">
-                        <label for="barang" class="col-sm-2 control-label">Pilih Barang:</label>
-                        <div class="col-sm-10">
-                          <select class="form-control select2" style="width: 100%;" name="produk" id="produk">
-                            <option selected="selected"> Pilih Barang</option>
-                            <?php
-                            error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
-                            $sql = mysqli_query($conn, "SELECT a.kode, a.nama, a.hargabeli, a.hargajual, a.sisa, a.sku FROM barang a;");
-                            while ($row = mysqli_fetch_assoc($sql)) {
-                              if ($barcode == $row['barcode'])
-                                echo "<option value='" . $row['kode'] . "' nama='" . $row['nama'] . "' hargabeli='" . $row['hargabeli'] . "' hargajual='" . $row['hargajual'] . "' kode='" . $row['kode'] . "' stok='" . $row['sisa'] . "' selected='selected'>" . $row['sku'] . " | " . $row['nama'] . "</option>";
-                              else
-                                echo "<option value='" . $row['kode'] . "' nama='" . $row['nama'] . "' hargabeli='" . $row['hargabeli'] . "' hargajual='" . $row['hargajual'] . "' kode='" . $row['kode'] . "' stok='" . $row['sisa'] . "'>" . $row['sku'] . " | " . $row['nama'] . "</option>";
-                            }
-                            ?>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
                     <form method="get" action="">
                       <div class="row">
-                        <div class="form-group col-md-12 col-xs-12">
-                          <label for="barang" class="col-sm-2 control-label">Barcode:</label>
-                          <div class="col-sm-8">
-                            <input type="text" class="form-control" id="barcode" name="barcode" oninput="show_barcode()" onkeyup="copy_barcode()">
+                        <?php if (isset($_GET['barcode'])) { ?>
+                          <div class="form-group col-md-12 col-xs-12">
+                            <?php if (isset($_GET['barcode']) && $check_data == null) { ?>
+                              <div class="alert alert-success">
+                                <strong>Barang Ditemukan</strong>
+                              </div>
+                            <?php }
+                            if (isset($_GET['barcode']) && $check_data != null) { ?>
+                              <div class="alert alert-danger">
+                                <strong>Barang Tidak Ditemukan</strong>
+                              </div>
+                            <?php } ?>
                           </div>
-                          <div class="col-sm-2">
-                            <button type="submit" class="btn btn-info btn-block" onclick="show_barcode();">Cari</button>
+                        <?php } ?>
+                        <div class="form-group col-md-12 col-xs-12">
+                          <div class="col-sm-12">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" name="new_sn" id="new_sn" value="1"> Serial Number Baru ?
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-xs-12 hidden" id="choose_barang">
+                          <label for="barang" class="col-sm-2 control-label">Pilih Barang:</label>
+                          <div class="col-sm-10">
+                            <select class="form-control select2" name="produk" id="produk" style="width: 100%;">
+                              <option selected="selected"> Pilih Barang</option>
+                              <?php
+                              error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+                              $sql = mysqli_query($conn, "SELECT a.kode, a.nama, a.hargabeli, a.hargajual, a.sisa, a.sku FROM barang a;");
+                              while ($row = mysqli_fetch_assoc($sql)) {
+                                echo "<option value='" . $row['kode'] . "' nama='" . $row['nama'] . "' hargabeli='" . $row['hargabeli'] . "' hargajual='" . $row['hargajual'] . "' kode='" . $row['kode'] . "' stok='" . $row['sisa'] . "'>" . $row['sku'] . " | " . $row['nama'] . "</option>";
+                              }
+                              ?>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-xs-12" id="cari_barcode">
+                          <label for="label_barcode" id="label_barcode" class="col-sm-2 control-label">Barcode / SN:</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="barcode" name="barcode" autocomplete="off">
+                          </div>
+                          <div class="col-sm-2" id="btn_aksi">
+                            <button type="submit" class="btn btn-info btn-block">Cari</button>
                           </div>
                         </div>
                       </div>
                     </form>
                     <hr>
 
-                    <form method="post" action="">
+                    <form method="post" action="" id="Myform" class="<?= $check_data ?>">
                       <div class="row">
                         <div class="form-group col-md-12 col-xs-12">
                           <label for="barang" class="col-sm-2 control-label">Nama Produk:</label>
@@ -311,7 +355,7 @@ if (!login_check()) {
                             <input class="form-control" readonly id="kode" name="kode" value="<?php echo $kode; ?>">
                             <input hidden class="form-control" readonly id="nota" name="nota" value="<?php echo autoNumber(); ?>">
                             <input type="hidden" class="form-control" readonly id="bc" name="bc" value="<?php echo $bc; ?>">
-                            <input class="form-control" readonly id="barcode_new" name="barcode_new" value="<?= $_GET["barcode"] ?>">
+                            <input class="form-control" readonly id="barcode_new" name="barcode_new" value="<?= isset($_GET["barcode"]) ? $_GET["barcode"] : ""; ?>">
                           </div>
 
                         </div>
@@ -320,7 +364,6 @@ if (!login_check()) {
                       <?php
                       error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
                       ?>
-
 
                       <div class="row">
                         <div class="form-group col-md-12 col-xs-12">
@@ -338,8 +381,6 @@ if (!login_check()) {
                           </div>
                         </div>
                       </div>
-
-
 
                       <div class="row">
                         <div class="form-group col-md-12 col-xs-12">
@@ -361,10 +402,7 @@ if (!login_check()) {
               </div>
             </div>
 
-
-
-
-            <div class="col-lg-7 col-xs-12">
+            <div class="col-lg-6 col-xs-12">
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Daftar Masuk</h3>
@@ -480,7 +518,7 @@ if (!login_check()) {
                       <div class="box box-danger">
                         <div class="box-header with-border">
 
-                          <form method="post" action="">
+                          <form method="post" action="" class=" <?= ($tcount > 0) ? null : $check_data ?>">
                             <div class="row">
                               <div class="form-group col-md-12 col-xs-12">
                                 <label for="barang" class="col-sm-2 control-label">Supplier:</label>
@@ -497,8 +535,14 @@ if (!login_check()) {
                                     ?>
                                   </select>
                                 </div>
-
                               </div>
+                              <div class="form-group col-md-12 col-xs-12">
+                                <label for="barang" class="col-sm-2 control-label">Keterangan:</label>
+                                <div class="col-sm-10">
+                                  <textarea class="form-control" rows="6" id="keterangan" name="keterangan" placeholder="Masukan Keterangan" required></textarea>
+                                </div>
+                              </div>
+
                             </div>
                             <br>
                             <input type="hidden" class="form-control" readonly id="notae" name="notae" value="<?php echo autoNumber(); ?>">
@@ -527,10 +571,6 @@ if (!login_check()) {
                 <!-- /.box-body -->
               </div>
             </div>
-
-
-
-
             <?php
 
             if (isset($_POST["simpan"])) {
@@ -540,14 +580,32 @@ if (!login_check()) {
                 $tgl = date('Y-m-d');
                 $usr = $_SESSION['nouser'];
                 $cab = $_SESSION['cab'];
+                $keterangan = mysqli_real_escape_string($conn, $_POST["keterangan"]);
 
                 $kegiatan = "Stok Masuk";
 
-                $sql2 = "INSERT INTO stok_masuk (nota, cabang, tgl, supplier, userid) VALUES( '$nota','$cab','$tgl','$sup','$usr')";
+                $sql2 = "INSERT INTO stok_masuk (nota, cabang, tgl, supplier, userid, keterangan) VALUES( '$nota','$cab','$tgl','$sup','$usr', '$keterangan')";
                 $insertan = mysqli_query($conn, $sql2);
+
+                $brg = "SELECT * FROM stok_masuk_daftar WHERE nota='$nota'";
+                $cekbrg = mysqli_query($conn, $brg);
+
+                $terbeli_b = 0;
+                $terbeli_s = 0;
+                while ($row = mysqli_fetch_assoc($cekbrg)) {
+                  $upd_1 = "UPDATE barang_detil SET terbeli=terbeli+$row[jumlah], sisa=sisa+$row[jumlah] WHERE id='$row[kode_barang]'";
+                  $upd_q_1 = mysqli_query($conn, $upd_1);
+                  $sel_1 = "SELECT * FROM barang_detil WHERE id='$row[kode_barang]'";
+                  $cek_1 = mysqli_query($conn, $sel_1);
+                  $row_1 = mysqli_fetch_assoc($cek_1);
+                  $id_barang = $row_1['id_barang'];
+                  $upd_2 = "UPDATE barang SET terbeli=terbeli+$row[jumlah], sisa=sisa+$row[jumlah] WHERE barcode='$id_barang'";
+                  $upd_q_2 = mysqli_query($conn, $upd_2);
+                }
 
                 $mut = "UPDATE mutasi SET status='berhasil' WHERE keterangan='$nota' AND kegiatan='stok masuk'";
                 $muta = mysqli_query($conn, $mut);
+
 
                 echo "<script type='text/javascript'>  alert('Stok selesai dimasukan!');</script>";
                 echo "<script type='text/javascript'>window.location = 'stok_masuk';</script>";
@@ -607,6 +665,33 @@ if (!login_check()) {
 
     $("#jumlah").val(1);
   });
+
+  $("#new_sn").on("change", function() {
+    let this_checked = $(this).is(":checked");
+    if (this_checked) {
+      $("#label_barcode").html("Masukan SN");
+      $("#btn_aksi").html('<button type="submit" name="new_bc" value="new_bc" class="btn btn-success btn-block">Tambah</button>');
+      $('#choose_barang').removeClass("hidden");
+    } else {
+      $("#label_barcode").html("Barcode / SN");
+      $("#btn_aksi").html('<button type="submit" name="find_bc" class="btn btn-info btn-block">Cari</button>');
+      $('#choose_barang').addClass("hidden");
+    }
+  })
+
+  $("#cari_berd").on("change", function() {
+    let cari = $("#cari_berd").val();
+    if (cari == "BarcodeSN") {
+      $('#cari_barcode').removeClass("hidden");
+      $('#cari_kode').addClass("hidden");
+    } else if (cari == "Kode") {
+      $('#cari_barcode').addClass("hidden");
+      $('#cari_kode').removeClass("hidden");
+    } else {
+      $('#cari_barcode').addClass("hidden");
+      $('#cari_kode').addClass("hidden");
+    }
+  })
 
   function copy_barcode() {
     const input1Value = document.getElementById('barcode').value;

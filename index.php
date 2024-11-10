@@ -390,7 +390,7 @@ if (!login_check()) {
                             <td><?php echo $nomor; ?></td>
                             <td><?php echo $kolomData['nama']; ?></td>
                             <td><?php echo $kolomData['sisa']; ?></td>
-                            <td><span class="badge bg-red"><?php echo round((($kolomData['sisa'] / $stok1) * 100), 2); ?></span></td>
+                            <td><span class="badge bg-red"><?php echo ($kolomData['sisa'] != 0) ? round((($kolomData['sisa'] / $stok1) * 100), 2) : 0 ?></span></td>
 
                           </tr>
                         </tbody>
@@ -443,7 +443,7 @@ if (!login_check()) {
                             <td><?php echo $nomor; ?></td>
                             <td><?php echo $kolomData['nama']; ?></td>
                             <td><?php echo $kolomData['terjual']; ?></td>
-                            <td><span class="badge bg-light-blue"><?php echo round((($kolomData['terjual'] / $stok2) * 100), 2); ?></span></td>
+                            <td><span class="badge bg-light-blue"><?php echo ($kolomData['terjual'] != 0) ? round((($kolomData['terjual'] / $stok2) * 100), 2) : 0 ?></span></td>
 
                           </tr>
                         </tbody>

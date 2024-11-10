@@ -30,10 +30,10 @@ if ($con == 'show_table') {
     $stok = $_GET['stok'];
 
     //check barcode
-    $check = mysqli_query($conn, "SELECT id, jumlah_masuk FROM barang_detil WHERE barcode = '$barcode' AND id_barang = '$kode';");
+    $check = mysqli_query($conn, "SELECT id, barcode FROM barang_detil WHERE barcode = '$barcode';");
     $row = mysqli_fetch_array($check);
     if (isset($row['id'])) {
-        echo "gagal";
+        echo "duplikat";
     } else {
         $sql2 = "insert into barang_detil (id_barang, barcode, terjual, terbeli) values('$kode','$barcode', '0', '0')";
         $insert = mysqli_query($conn, $sql2);

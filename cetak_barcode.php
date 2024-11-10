@@ -140,9 +140,9 @@ if (!login_check()) {
                                   $sql = mysqli_query($conn, "select *,barang.nama as nama, barang.kode as kode, barang.sku as sku from barang");
                                   while ($row = mysqli_fetch_assoc($sql)) {
                                     if ($barcode == $row['barcode'])
-                                      echo "<option value='" . $row['kode'] . "' barcode='" . $row['sku'] . "'  selected='selected'>" . $row['sku'] . " | " . $row['nama'] . "</option>";
+                                      echo "<option value='" . $row['kode'] . "' barcode='" . $row['barcode'] . "'  selected='selected'>" . $row['sku'] . " | " . $row['nama'] . "</option>";
                                     else
-                                      echo "<option value='" . $row['kode'] . "' barcode='" . $row['sku'] . "'  >" . $row['sku'] . " | " . $row['nama'] . "</option>";
+                                      echo "<option value='" . $row['kode'] . "' barcode='" . $row['barcode'] . "'  >" . $row['sku'] . " | " . $row['nama'] . "</option>";
                                   }
                                   ?>
                                 </select>

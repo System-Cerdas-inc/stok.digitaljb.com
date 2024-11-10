@@ -194,7 +194,7 @@ if (!login_check()) {
                                     <?php } else { ?>
                                       <input class="form-control" type="hidden" readonly id="kode" name="kode" value="<?php echo autoNumber(); ?>">
                                       <input class="form-control" type="text" readonly id="sku" name="sku" value="SKU<?php echo autoNumber(); ?>">
-                                      <input class="form-control" type="hidden" readonly id="barcode" name="barcode" value="<?php echo $w['barcode']; ?>">
+                                      <input class="form-control" type="hidden" readonly id="barcode" name="barcode" value="<?php echo 'BRG' . autoNumber(); ?>">
                                     <?php } ?>
                                   </td>
                                 </tr>
@@ -563,7 +563,7 @@ if (!login_check()) {
             // echo $sql2;
             $res_sql2 = mysqli_query($conn, $sql2);
 
-            $sql_c = "SELECT * from barang_detil where id_barang = '$sku'";
+            $sql_c = "SELECT * from barang_detil where id_barang = '$barcode'";
             $result_c = mysqli_query($conn, $sql_c);
             $num_rows_c = mysqli_num_rows($result_c);
             // echo "<script type='text/javascript'>  alert('" . $res_sql2 . "'); </script>";
@@ -643,7 +643,7 @@ if (!login_check()) {
   }
 
   function tambah_barcode() {
-    var kode = document.getElementById('sku').value;
+    var kode = document.getElementById('barcode').value;
     var result = document.getElementById('result').value;
 
     if (result == '') {
@@ -657,6 +657,8 @@ if (!login_check()) {
             table_show();
             $('#result').val(null);
             alert('Data barcode berhasil disimpan.');
+          } else if (data === 'duplikat') {
+            alert('Data barcode sudah ada!');
           } else {
             alert('Data barcode gagal disimpan, coba lagi!');
           }
