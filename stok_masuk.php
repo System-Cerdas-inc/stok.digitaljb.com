@@ -189,6 +189,7 @@ if (!login_check()) {
                       <th>No.Trx</th>
                       <th>Tanggal</th>
                       <th>Supplier</th>
+                      <th>Keterangan</th>
                       <?php if ($chmod >= 3 || $_SESSION['jabatan'] == 'admin') { ?>
                         <th>Opsi</th>
                       <?php } else {
@@ -215,6 +216,7 @@ if (!login_check()) {
                               <td><?php echo mysqli_real_escape_string($conn, $fill['nota']); ?></td>
                               <td><?php echo mysqli_real_escape_string($conn, $fill['tgl']); ?></td>
                               <td><?php echo mysqli_real_escape_string($conn, $fill['supplier']); ?></td>
+                              <td><?php echo mysqli_real_escape_string($conn, $fill['keterangan']); ?></td>
                               <td>
 
                                 <?php if ($chmod >= 4 || $_SESSION['jabatan'] == 'admin') { ?>
@@ -246,6 +248,7 @@ if (!login_check()) {
                   <td><?php echo mysqli_real_escape_string($conn, $fill['nota']); ?></td>
                   <td><?php echo mysqli_real_escape_string($conn, $fill['tgl']); ?></td>
                   <td><?php echo mysqli_real_escape_string($conn, $fill['supplier']); ?></td>
+                  <td><?php echo mysqli_real_escape_string($conn, $fill['keterangan']); ?></td>
                   <td>
 
 
