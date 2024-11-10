@@ -297,7 +297,7 @@ if (!login_check()) {
                                   </tr>
 
                                   <tr>
-                                    <td>Serial Number</td>
+                                    <td>Barcode</td>
                                     <td>:</td>
                                     <td><input class="form-control" name="barcode" value="<?php echo $w['barcode']; ?>" required readonly> </td>
                                   </tr>
@@ -461,7 +461,6 @@ if (!login_check()) {
                 <div class="box-footer">
 
                   <button class="btn btn-primary" type="submit" name="savebarang"><i class="fa fa-check-square-o" aria-hidden="true"></i> Simpan</button>
-                  <a class="btn btn-warning" href="add_barang"><i class="fa fa-retweet" aria-hidden="true"></i>Reset</a>
                   <a class="btn btn-danger" href="barang"><i class="fa fa-window-close" aria-hidden="true"></i> Batal</a>
                 </div>
 
@@ -563,13 +562,13 @@ if (!login_check()) {
             // echo $sql2;
             $res_sql2 = mysqli_query($conn, $sql2);
 
-            $sql_c = "SELECT * from barang_detil where id_barang = '$sku'";
+            $sql_c = "SELECT * from barang_detil where id_barang = '$barcode'";
             $result_c = mysqli_query($conn, $sql_c);
             $num_rows_c = mysqli_num_rows($result_c);
             // echo "<script type='text/javascript'>  alert('" . $res_sql2 . "'); </script>";
             if ($res_sql2) {
               if ($num_rows_c == 0) {
-                $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$sku', '$sku', '0', '0')";
+                $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$barcode', '$barcode', '0', '0')";
                 $res_sql3 = mysqli_query($conn, $sql3);
                 if ($res_sql3) {
                   echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
@@ -657,6 +656,8 @@ if (!login_check()) {
             table_show();
             $('#result').val(null);
             alert('Data barcode berhasil disimpan.');
+          } else if (data === 'duplikat') {
+            alert('Data barcode sudah ada!');
           } else {
             alert('Data barcode gagal disimpan, coba lagi!');
           }
