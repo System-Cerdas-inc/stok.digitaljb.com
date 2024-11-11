@@ -230,7 +230,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
           }
         }
       else if(( $chmod >= 2 || $_SESSION['jabatan'] == 'admin')){
-           $sql2 = "insert into $tabeldatabase values( '$kode','$nama','$nohp','$alamat','')";
+           $sql2 = "insert into $tabeldatabase values( '$kode','$nama','$nohp','$alamat',null)";
            if(mysqli_query($conn, $sql2)){
            echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
            echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
