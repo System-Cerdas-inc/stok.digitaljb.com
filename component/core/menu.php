@@ -168,7 +168,7 @@ if($chmenu7 >= 1 || $_SESSION['jabatan'] == 'admin'){ ?>
 if($chmenu2 >= 1 || $_SESSION['jabatan'] == 'admin'){ ?>
 
                         <li class="treeview">
-                            <a href="#"> <i class="glyphicon glyphicon-folder-close"></i> <span>Supplier & Pelanggan</span> <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i> </span> </a>
+                            <a href="#"> <i class="glyphicon glyphicon-folder-close"></i> <span>Supplier & P. Jwb</span> <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i> </span> </a>
                <ul class="treeview-menu">
                                 <li>
                                     <a href="supplier"><i class="fa fa-circle-o"></i>Data Supplier</a>
@@ -177,10 +177,10 @@ if($chmenu2 >= 1 || $_SESSION['jabatan'] == 'admin'){ ?>
                                     <a href="add_supplier"><i class="fa fa-circle-o"></i>Tambah Supplier</a>
                                                   </li>
                                                    <li>
-                                    <a href="customer"><i class="fa fa-circle-o"></i>Data Pelanggan</a>
+                                    <a href="penanggung_jawab"><i class="fa fa-circle-o"></i>Data Penanggung Jawab</a>
                                 </li>
                                  <li>
-                                    <a href="add_customer"><i class="fa fa-circle-o"></i>Tambah pelanggan</a>
+                                    <a href="add_penanggung_jawab"><i class="fa fa-circle-o"></i>Tambah Penanggung Jawab</a>
                                 </li>
                             </ul>
                         </li>

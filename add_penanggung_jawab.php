@@ -35,9 +35,9 @@ menu();
 <?php
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 include "configuration/config_chmod.php";
-$halaman = "customer"; // data
-$dataapa = "Pelanggan"; // data apa
-$tabeldatabase = "pelanggan"; // tabel database
+$halaman = "penanggung_jawab"; // data
+$dataapa = "Penanggung Jawab"; // data apa
+$tabeldatabase = "penanggung_jawab"; // tabel database
 $chmod = $chmenu2; // Hak akses Menu
 $forward = mysqli_real_escape_string($conn, $tabeldatabase); // tabel database
 $forwardpage = mysqli_real_escape_string($conn, $halaman); // halaman
@@ -149,7 +149,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
 
         <div class="row">
                 <div class="form-group col-md-6 col-xs-12" >
-                  <label for="kode" class="col-sm-3 control-label">Kode Pelanggan:</label>
+                  <label for="kode" class="col-sm-3 control-label">Kode Penanggung Jawab:</label>
                   <div class="col-sm-9">
                    <?php  if($no == null || $no ==""){ ?>
                     <input type="text" class="form-control" id="kode" name="kode" value="<?php echo autoNumber(); ?>" maxlength="50" required readonly>
@@ -162,7 +162,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
 
         <div class="row">
            <div class="form-group col-md-6 col-xs-12" >
-                  <label for="nama" class="col-sm-3 control-label">Nama Pelanggan:</label>
+                  <label for="nama" class="col-sm-3 control-label">Nama Penanggung Jawab:</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>" placeholder="Masukan Nama" maxlength="50" required>
                   </div>
