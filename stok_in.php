@@ -593,7 +593,7 @@ if (!login_check()) {
                 $terbeli_b = 0;
                 $terbeli_s = 0;
                 while ($row = mysqli_fetch_assoc($cekbrg)) {
-                  $upd_1 = "UPDATE barang_detil SET terbeli=terbeli+$row[jumlah], sisa=sisa+$row[jumlah] WHERE id='$row[kode_barang]'";
+                  $upd_1 = "UPDATE barang_detil SET terbeli=terbeli+$row[jumlah], sisa=sisa+$row[jumlah], terbeli_p=0, jumlah_masuk_p=0 WHERE id='$row[kode_barang]'";
                   $upd_q_1 = mysqli_query($conn, $upd_1);
                   $sel_1 = "SELECT * FROM barang_detil WHERE id='$row[kode_barang]'";
                   $cek_1 = mysqli_query($conn, $sel_1);
