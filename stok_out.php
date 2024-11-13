@@ -307,30 +307,6 @@ if (!login_check()) {
                             <?php } ?>
                           </div>
                         <?php } ?>
-                        <div class="form-group col-md-12 col-xs-12">
-                          <div class="col-sm-12">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox" name="new_sn" id="new_sn" value="1"> Serial Number Baru ?
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group col-md-12 col-xs-12 hidden" id="choose_barang">
-                          <label for="barang" class="col-sm-2 control-label">Pilih Barang:</label>
-                          <div class="col-sm-10">
-                            <select class="form-control select2" name="produk" id="produk" style="width: 100%;">
-                              <option selected="selected"> Pilih Barang</option>
-                              <?php
-                              error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
-                              $sql = mysqli_query($conn, "SELECT a.kode, a.nama, a.hargabeli, a.hargajual, a.sisa, a.sku FROM barang a;");
-                              while ($row = mysqli_fetch_assoc($sql)) {
-                                echo "<option value='" . $row['kode'] . "' nama='" . $row['nama'] . "' hargabeli='" . $row['hargabeli'] . "' hargajual='" . $row['hargajual'] . "' kode='" . $row['kode'] . "' stok='" . $row['sisa'] . "'>" . $row['sku'] . " | " . $row['nama'] . "</option>";
-                              }
-                              ?>
-                            </select>
-                          </div>
-                        </div>
                         <div class="form-group col-md-12 col-xs-12" id="cari_barcode">
                           <label for="label_barcode" id="label_barcode" class="col-sm-2 control-label">Barcode / SN:</label>
                           <div class="col-sm-8">
@@ -380,7 +356,18 @@ if (!login_check()) {
                         </div>
                       </div>
 
-                      <div class="row">
+                      
+                      <?php if (isset($_POST['barcode'])) { ?>
+                          <div class="form-group col-md-12 col-xs-12">
+                            <?php if ($stok_detil < 1) { ?>
+                              <div class="alert alert-danger">
+                                <strong>Stok Dengan Serial Number Ini kosong</strong>
+                              </div>
+                            <?php }?>
+                          </div>
+                        <?php } ?>
+
+                      <div class="row <?= ($stok_detil == 0) ? 'hidden' : null ?>">
                         <div class="form-group col-md-12 col-xs-12">
                           <label for="barang" class="col-sm-2 control-label">Jumlah:</label>
                           <div class="col-sm-5">
@@ -598,7 +585,7 @@ if (!login_check()) {
                 $terbeli_b = 0;
                 $terbeli_s = 0;
                 while ($row = mysqli_fetch_assoc($cekbrg)) {
-                  $upd_1 = "UPDATE barang_detil SET terjual=terjual+$row[jumlah], sisa=sisa-$row[jumlah] WHERE id='$row[kode_barang]'";
+                  $upd_1 = "UPDATE barang_detil SET terjual=terjual+$row[jumlah], sisa=sisa-$row[jumlah], jumlah_keluar_p=0, terjual_p=0 WHERE id='$row[kode_barang]'";
                   $upd_q_1 = mysqli_query($conn, $upd_1);
                   $sel_1 = "SELECT * FROM barang_detil WHERE id='$row[kode_barang]'";
                   $cek_1 = mysqli_query($conn, $sel_1);
