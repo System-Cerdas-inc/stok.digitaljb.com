@@ -178,7 +178,7 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
                                   <!-- /.Paginasi -->
                                  <?php
     error_reporting(E_ALL ^ E_DEPRECATED);
-    $sql    = "select mutasi.namauser,mutasi.tgl,mutasi.kodebarang,mutasi.status,mutasi.jumlah,mutasi.sisa,mutasi.kegiatan,mutasi.keterangan,barang.nama from mutasi inner join barang on mutasi.kodebarang=barang.kode order by mutasi.no desc";
+    $sql    = "select mutasi.namauser,mutasi.tgl,mutasi.kodebarang,mutasi.status,mutasi.jumlah,mutasi.sisa,mutasi.kegiatan,mutasi.keterangan,barang.nama from mutasi inner join barang on mutasi.kodebarang=barang.no order by mutasi.no desc";
     $result = mysqli_query($conn, $sql);
     $rpp    = 15;
     $reload = "$halaman"."?pagination=true";

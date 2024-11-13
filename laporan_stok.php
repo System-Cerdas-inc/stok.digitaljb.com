@@ -158,7 +158,7 @@ if($bulan == null || $search == "" ){
                                               <th>Masuk</th>
                                               <th>Keluar</th>
                                               <th>Stok Sistem</th>
-                                               <th>Stok Aktual</th>
+                                              <th>Stok Aktual</th>
                                           
                                           
                         <?php if ($chmod >= 3 || $_SESSION['jabatan'] == 'admin') { ?>
@@ -184,7 +184,7 @@ if($bulan == null || $search == "" ){
  
 
   <td><?php  
-  $kd=$fill['kode'];  
+  $kd=$fill['no'];  
   $a=mysqli_fetch_assoc(mysqli_query($conn, "SELECT stok_masuk.tgl as tgl, stok_masuk_daftar.kode_barang as brg, SUM(stok_masuk_daftar.jumlah) as masuk FROM stok_masuk INNER JOIN stok_masuk_daftar ON stok_masuk_daftar.nota=stok_masuk.nota WHERE stok_masuk_daftar.kode_barang='$kd' "));
 
 echo $a['masuk']+0;
@@ -195,8 +195,8 @@ echo $a['masuk']+0;
 
   </td>
  <td><?php  
-  $kd=$fill['kode'];  
-  $b=mysqli_fetch_assoc(mysqli_query($conn, "SELECT stok_keluar.tgl as tgl, stok_keluar_daftar.kode_barang as brg, SUM(stok_keluar_daftar.jumlah) as keluar FROM stok_keluar INNER JOIN stok_keluar_daftar ON stok_keluar_daftar.nota=stok_keluar.nota WHERE stok_keluar_daftar.kode_barang='$kd'"));
+  $kd=$fill['no'];  
+  $b=mysqli_fetch_assoc(mysqli_query($conn, "SELECT stok_keluar.tgl as tgl, stok_keluar_daftar.kode_barang as brg, SUM(stok_keluar_daftar.jumlah_keluar) as keluar FROM stok_keluar INNER JOIN stok_keluar_daftar ON stok_keluar_daftar.nota=stok_keluar.nota WHERE stok_keluar_daftar.kode_barang='$kd'"));
 
 echo $b['keluar']+0;
 
