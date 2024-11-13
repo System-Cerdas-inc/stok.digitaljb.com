@@ -521,8 +521,8 @@ if (!login_check()) {
                           <form method="post" action="" class=" <?= ($tcount > 0) ? null : $check_data ?>">
                             <div class="row">
                               <div class="form-group col-md-12 col-xs-12">
-                                <label for="barang" class="col-sm-2 control-label">Supplier:</label>
-                                <div class="col-sm-10">
+                                <label for="barang" class="col-sm-3 control-label">Supplier:</label>
+                                <div class="col-sm-9">
                                   <select class="form-control select2" style="width: 100%;" name="supplier">
                                     <?php
                                     $sql = mysqli_query($conn, "select * from supplier");
@@ -537,8 +537,8 @@ if (!login_check()) {
                                 </div>
                               </div>
                               <div class="form-group col-md-12 col-xs-12">
-                                <label for="barang" class="col-sm-2 control-label">Keterangan:</label>
-                                <div class="col-sm-10">
+                                <label for="barang" class="col-sm-3 control-label">Keterangan:</label>
+                                <div class="col-sm-9">
                                   <textarea class="form-control" rows="6" id="keterangan" name="keterangan" placeholder="Masukan Keterangan" required></textarea>
                                 </div>
                               </div>
@@ -593,7 +593,7 @@ if (!login_check()) {
                 $terbeli_b = 0;
                 $terbeli_s = 0;
                 while ($row = mysqli_fetch_assoc($cekbrg)) {
-                  $upd_1 = "UPDATE barang_detil SET terbeli=terbeli+$row[jumlah], sisa=sisa+$row[jumlah] WHERE id='$row[kode_barang]'";
+                  $upd_1 = "UPDATE barang_detil SET terbeli=terbeli+$row[jumlah], sisa=sisa+$row[jumlah], terbeli_p=0, jumlah_masuk_p=0 WHERE id='$row[kode_barang]'";
                   $upd_q_1 = mysqli_query($conn, $upd_1);
                   $sel_1 = "SELECT * FROM barang_detil WHERE id='$row[kode_barang]'";
                   $cek_1 = mysqli_query($conn, $sel_1);

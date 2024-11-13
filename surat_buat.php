@@ -51,12 +51,12 @@ if (!login_check()) {
           $chmod = $chmenu5; // Hak akses Menu
           $forward = mysqli_real_escape_string($conn, $tabeldatabase); // tabel database
           $forwardpage = mysqli_real_escape_string($conn, $halaman); // halaman
-          $search = $_POST['search'];
-          $insert = $_POST['insert'];
+          $search = isset($_POST['search']) ? $_POST['search'] : '';
+          $insert = isset($_POST['insert']) ? $_POST['insert'] : '';
 
           $nota = $_GET['q'];
 
-          $sql = mysqli_query($conn, "SELECT keterangan FROM stok_keluar WHERE nota='$nota'");
+          $sql = mysqli_query($conn, "SELECT * FROM stok_keluar WHERE nota='$nota'");
           $ai = mysqli_fetch_assoc($sql);
 
           ?>
@@ -108,7 +108,7 @@ if (!login_check()) {
 
             <!-- KONTEN BODY AWAL -->
             <!-- Default box -->
-            <div class="col-lg-6">
+            <div class="col-lg-5">
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Form Surat Jalan</h3>
@@ -136,52 +136,33 @@ if (!login_check()) {
                     <br>
 
                     <div class="form-group">
-                      <label>Pilih Tujuan</label>
-                      <select class="form-control select2" style="width: 100%;" name="pilih" id="pilih">
-                        <option selected="selected" value="">Pilih Pelanggan</option>
-                        <?php
-                        error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
-                        $sql = mysqli_query($conn, "select * from pelanggan");
-                        while ($row = mysqli_fetch_assoc($sql)) {
-                          if ($barcode == $row['barcode'])
-                            echo "<option value='" . $row['kode'] . "' nama='" . $row['nama'] . "' notelp='" . $row['notelp'] . "' alamat='" . $row['alamat'] . "' >" . $row['kode'] . " | " . $row['nama'] . "</option>";
-                          else
-                            echo "<option value='" . $row['kode'] . "' nama='" . $row['nama'] . "' notelp='" . $row['notelp'] . "' alamat='" . $row['alamat'] . "' >" . $row['kode'] . " | " . $row['nama'] . "</option>";
-                        }
-                        ?>
-                      </select>
-                    </div>
-
-
-
-                    <div class="form-group">
-                      <label>Tujuan</label>
-                      <input type="text" class="form-control" id="tujuan" name="tujuan">
+                      <label>Tujuan Penerima</label>
+                      <input type="text" class="form-control" id="tujuan" name="tujuan" value="<?php echo $ai['tujuan']; ?>">
                     </div>
 
                     <div class="form-group">
-                      <label>Nomor Telepon</label>
-                      <input type="text" class="form-control" id="notelp" name="notelp">
+                      <label>Nomor Telepon Penerima</label>
+                      <input type="text" class="form-control" id="notelp" name="notelp" value="<?php echo $ai['notelp_tujuan']; ?>">
                     </div>
 
                     <div class="form-group">
                       <label>Alamat</label>
-                      <textarea class="form-control" rows="3" id="alamat" placeholder="Alamat Lengkap" name="alamat"></textarea>
+                      <textarea class="form-control" rows="3" id="alamat" placeholder="Alamat Lengkap" name="alamat"><?php echo $ai['tujuan']; ?></textarea>
                     </div>
 
                     <div class="form-group">
                       <label>Driver/Kurir</label>
-                      <input type="text" class="form-control" name="driver">
+                      <input type="text" class="form-control" name="driver" value="<?php echo $ai['penanggung_jawab']; ?>">
                     </div>
 
                     <div class="form-group">
                       <label>No.Hp Driver/Kurir</label>
-                      <input type="text" class="form-control" name="nohp">
+                      <input type="text" class="form-control" name="nohp" value="<?php echo $ai['notelp_pj']; ?>">
                     </div>
 
                     <div class="form-group">
-                      <label>Nomor Polisi Kendaraan</label>
-                      <input type="text" class="form-control" placeholder="optional" name="nopol">
+                      <label>Nomor Polisi Kendaraan (Opsional)</label>
+                      <input type="text" class="form-control" placeholder="Nomor Plat Kendaraan" name="nopol">
                     </div>
 
                     <div class="form-group">
@@ -207,7 +188,7 @@ if (!login_check()) {
 
 
 
-            <div class="col-lg-6">
+            <div class="col-lg-7">
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Daftar Barang</h3>
@@ -323,7 +304,7 @@ if (!login_check()) {
                 echo "<script type='text/javascript'>window.location = 'surat_buat?q=$nota';</script>";
               } else {
 
-                $sql2 = "insert into surat values ('$nota','$nomor','$tgl','$pilih','$tujuan','$telp','$alamat','$driver','$nohp','$nopol','$by',0)";
+                $sql2 = "insert into surat values ('$nota','$nomor','$tgl','$pilih','$tujuan','$telp','$alamat','$driver','$nohp','$nopol',0,'$by',0)";
                 $result2 = mysqli_query($conn, $sql2);
                 if ($result2) {
 

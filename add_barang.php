@@ -496,8 +496,6 @@ if (!login_check()) {
           $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
           $satuan = mysqli_real_escape_string($conn, $_POST["satuan"]);
           $kategori = mysqli_real_escape_string($conn, $_POST["kategori"]);
-          // $hargabeli = mysqli_real_escape_string($conn, $_POST["harga_beli"]);
-          // $hargajual = mysqli_real_escape_string($conn, $_POST["harga_jual"]);
           $hargabeli = 0;
           $hargajual = 0;
           $stokmin = mysqli_real_escape_string($conn, $_POST["stok_minimal"]);
@@ -517,10 +515,8 @@ if (!login_check()) {
           $avatar = "dist/upload/" . $namaavatar;
           $insert = ($_POST["insert"]);
 
-          //check stok
           $stok_barang = mysqli_query($conn, "SELECT SUM(jumlah_masuk) AS jml FROM barang_detil WHERE id_barang = '$sku';");
           $row_stok_barang = mysqli_fetch_array($stok_barang);
-          // $stok = mysqli_real_escape_string($conn, $_POST["stok"]);
           $stok_new = $row_stok_barang['jml'];
 
           $sql = "SELECT * from $tabeldatabase where kode='$kode'";
@@ -557,16 +553,14 @@ if (!login_check()) {
               echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
             }
           } else if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
-            // move_uploaded_file($tmp, $avatar);
             $sql2 = "INSERT into barang (kode, sku, nama, hargabeli, hargajual, keterangan, kategori, satuan, terjual, terbeli, sisa, stokmin, barcode, brand, lokasi, expired, warna, ukuran, avatar) 
-              values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', '$stok_new', '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
+              values('$kode', '$sku', '$nama', '0', '0', NULL, '$kategori', '$satuan', '0', '0', '$stok_new', '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
             // echo $sql2;
             $res_sql2 = mysqli_query($conn, $sql2);
 
             $sql_c = "SELECT * from barang_detil where id_barang = '$barcode'";
             $result_c = mysqli_query($conn, $sql_c);
             $num_rows_c = mysqli_num_rows($result_c);
-            // echo "<script type='text/javascript'>  alert('" . $res_sql2 . "'); </script>";
             if ($res_sql2) {
               if ($num_rows_c == 0) {
                 $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$barcode', '$barcode', '0', '0')";
@@ -575,7 +569,7 @@ if (!login_check()) {
                   echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
                   echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
                 } else {
-                  echo "<script type='text/javascript'>  alert('Gagal, Data gagal disimpan!'); </script>";
+                  echo "<script type='text/javascript'>  alert('Gagal 1, Data gagal disimpan!'); </script>";
                   echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
                 }
               } else {
@@ -584,13 +578,21 @@ if (!login_check()) {
               }
             } else {
               $avatar = "dist/upload/index.jpg";
-              $sql2 = "INSERT into $tabeldatabase values('$kode','$sku','$nama','$hargabeli','$hargajual','$ket','$kategori','$satuan','0','0','$stok_new','$stokmin','$barcode','$brand','$rak','$exp','$warna','$ukuran','$avatar','')";
+              $sql2 = "INSERT into barang (kode, sku, nama, hargabeli, hargajual, keterangan, kategori, satuan, terjual, terbeli, sisa, stokmin, barcode, brand, lokasi, expired, warna, ukuran, avatar) 
+              values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', ".($stok_new == '' ? '0' : $stok_new).", '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
+              $res_sql2 = mysqli_query($conn, $sql2);
               if ($res_sql2) {
+                $sql_c = "SELECT * from barang_detil where id_barang = '$barcode'";
+                $result_c = mysqli_query($conn, $sql_c);
+                $num_rows_c = mysqli_num_rows($result_c);
+                if ($num_rows_c == 0) {
+                  $sql3 = "INSERT into barang_detil (id_barang, barcode, terjual, terbeli) values('$barcode', '$barcode', '0', '0')";
+                  $res_sql3 = mysqli_query($conn, $sql3);
+                }
                 echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
                 echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
               } else {
-
-                echo "<script type='text/javascript'>  alert('Gagal, Data gagal disimpan!'); </script>";
+                echo "<script type='text/javascript'>  alert('Gagal 2, Data gagal disimpan!'); </script>";
                 echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
               }
             }
