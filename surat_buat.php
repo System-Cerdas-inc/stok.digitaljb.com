@@ -56,7 +56,7 @@ if (!login_check()) {
 
           $nota = $_GET['q'];
 
-          $sql = mysqli_query($conn, "SELECT keterangan FROM stok_keluar WHERE nota='$nota'");
+          $sql = mysqli_query($conn, "SELECT * FROM stok_keluar WHERE nota='$nota'");
           $ai = mysqli_fetch_assoc($sql);
 
           ?>
@@ -136,31 +136,12 @@ if (!login_check()) {
                     <br>
 
                     <div class="form-group">
-                      <label>Pilih Tujuan</label>
-                      <select class="form-control select2" style="width: 100%;" name="pilih" id="pilih">
-                        <option selected="selected" value="">Pilih Pelanggan</option>
-                        <?php
-                        error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
-                        $sql = mysqli_query($conn, "select * from pelanggan");
-                        while ($row = mysqli_fetch_assoc($sql)) {
-                          if ($barcode == $row['barcode'])
-                            echo "<option value='" . $row['kode'] . "' nama='" . $row['nama'] . "' notelp='" . $row['notelp'] . "' alamat='" . $row['alamat'] . "' >" . $row['kode'] . " | " . $row['nama'] . "</option>";
-                          else
-                            echo "<option value='" . $row['kode'] . "' nama='" . $row['nama'] . "' notelp='" . $row['notelp'] . "' alamat='" . $row['alamat'] . "' >" . $row['kode'] . " | " . $row['nama'] . "</option>";
-                        }
-                        ?>
-                      </select>
-                    </div>
-
-
-
-                    <div class="form-group">
-                      <label>Tujuan</label>
-                      <input type="text" class="form-control" id="tujuan" name="tujuan">
+                      <label>Tujuan Penerima</label>
+                      <input type="text" class="form-control" id="tujuan" name="tujuan" value="<?php echo $ai['tujuan']; ?>">
                     </div>
 
                     <div class="form-group">
-                      <label>Nomor Telepon</label>
+                      <label>Nomor Telepon Penerima</label>
                       <input type="text" class="form-control" id="notelp" name="notelp">
                     </div>
 
@@ -171,17 +152,17 @@ if (!login_check()) {
 
                     <div class="form-group">
                       <label>Driver/Kurir</label>
-                      <input type="text" class="form-control" name="driver">
+                      <input type="text" class="form-control" name="driver" value="<?php echo $ai['penanggung_jawab']; ?>">
                     </div>
 
                     <div class="form-group">
                       <label>No.Hp Driver/Kurir</label>
-                      <input type="text" class="form-control" name="nohp">
+                      <input type="text" class="form-control" name="nohp" value="<?php echo $ai['notelp_pj']; ?>">
                     </div>
 
                     <div class="form-group">
-                      <label>Nomor Polisi Kendaraan</label>
-                      <input type="text" class="form-control" placeholder="optional" name="nopol">
+                      <label>Nomor Polisi Kendaraan (Opsional)</label>
+                      <input type="text" class="form-control" placeholder="Nomor Plat Kendaraan" name="nopol">
                     </div>
 
                     <div class="form-group">
