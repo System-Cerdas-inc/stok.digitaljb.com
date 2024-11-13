@@ -209,7 +209,7 @@ $ket = $row['keterangan'];
           <td><?php echo mysqli_real_escape_string($conn, $fill['nama']); ?></td>
           <td align="center"><?php echo mysqli_real_escape_string($conn, $fill['jumlah']); ?></td>
           <td align="center"><?php $cba = $fill['kode_barang'];
-                              $r = mysqli_fetch_assoc(mysqli_query($conn, "SELECT satuan FROM barang WHERE kode='$cba'"));
+                              $r = mysqli_fetch_assoc(mysqli_query($conn, "SELECT satuan FROM barang WHERE no='$cba'"));
                               echo mysqli_real_escape_string($conn, $r['satuan']); ?>
           </td>
 
@@ -222,10 +222,10 @@ $ket = $row['keterangan'];
   <br>
   <table width="100%" border="1">
     <tbody>
-      <tr>
+      <tr style="vertical-align: top;">
         <th width="201" scope="col">Dibuat</th>
         <th width="202" scope="col">Diketahui</th>
-        <th width="218" scope="col">Dikirim (<?php echo $nopol; ?>)</th>
+        <th width="218" scope="col">Penanggung Jawab<?= ($nopol != '' || $nopol != null) ? "<br> (".$nopol.")": null ?></th>
         <th width="208" scope="col">Penerima</th>
       </tr>
       <tr>
