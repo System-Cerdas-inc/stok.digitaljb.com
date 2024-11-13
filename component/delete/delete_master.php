@@ -17,7 +17,7 @@ if ($chmod == '4' || $chmod == '5' || $_SESSION['jabatan'] == 'admin' || $_SESSI
     $sql2 = "select * from barang where no='" . $no . "'";
     $query2 = mysqli_query($conn, $sql2);
     $data2 = mysqli_fetch_assoc($query2);
-    $id_barang = $data2['sku'];
+    $id_barang = $data2['barcode'];
   }
 
   $sql = "delete from $forward where no='" . $no . "'";
