@@ -51,8 +51,8 @@ if (!login_check()) {
           $chmod = $chmenu5; // Hak akses Menu
           $forward = mysqli_real_escape_string($conn, $tabeldatabase); // tabel database
           $forwardpage = mysqli_real_escape_string($conn, $halaman); // halaman
-          $search = $_POST['search'];
-          $insert = $_POST['insert'];
+          $search = isset($_POST['search']) ? $_POST['search'] : '';
+          $insert = isset($_POST['insert']) ? $_POST['insert'] : '';
 
           $nota = $_GET['q'];
 
