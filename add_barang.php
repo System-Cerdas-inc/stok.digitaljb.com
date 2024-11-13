@@ -496,8 +496,6 @@ if (!login_check()) {
           $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
           $satuan = mysqli_real_escape_string($conn, $_POST["satuan"]);
           $kategori = mysqli_real_escape_string($conn, $_POST["kategori"]);
-          // $hargabeli = mysqli_real_escape_string($conn, $_POST["harga_beli"]);
-          // $hargajual = mysqli_real_escape_string($conn, $_POST["harga_jual"]);
           $hargabeli = 0;
           $hargajual = 0;
           $stokmin = mysqli_real_escape_string($conn, $_POST["stok_minimal"]);
@@ -517,10 +515,8 @@ if (!login_check()) {
           $avatar = "dist/upload/" . $namaavatar;
           $insert = ($_POST["insert"]);
 
-          //check stok
           $stok_barang = mysqli_query($conn, "SELECT SUM(jumlah_masuk) AS jml FROM barang_detil WHERE id_barang = '$sku';");
           $row_stok_barang = mysqli_fetch_array($stok_barang);
-          // $stok = mysqli_real_escape_string($conn, $_POST["stok"]);
           $stok_new = $row_stok_barang['jml'];
 
           $sql = "SELECT * from $tabeldatabase where kode='$kode'";
@@ -558,7 +554,8 @@ if (!login_check()) {
             }
           } else if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
             $sql2 = "INSERT into barang (kode, sku, nama, hargabeli, hargajual, keterangan, kategori, satuan, terjual, terbeli, sisa, stokmin, barcode, brand, lokasi, expired, warna, ukuran, avatar) 
-              values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', '$stok_new', '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
+              values('$kode', '$sku', '$nama', '0', '0', NULL, '$kategori', '$satuan', '0', '0', '$stok_new', '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
+            // echo $sql2;
             $res_sql2 = mysqli_query($conn, $sql2);
 
             $sql_c = "SELECT * from barang_detil where id_barang = '$barcode'";
