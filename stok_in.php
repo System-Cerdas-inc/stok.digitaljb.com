@@ -521,8 +521,8 @@ if (!login_check()) {
                           <form method="post" action="" class=" <?= ($tcount > 0) ? null : $check_data ?>">
                             <div class="row">
                               <div class="form-group col-md-12 col-xs-12">
-                                <label for="barang" class="col-sm-2 control-label">Supplier:</label>
-                                <div class="col-sm-10">
+                                <label for="barang" class="col-sm-3 control-label">Supplier:</label>
+                                <div class="col-sm-9">
                                   <select class="form-control select2" style="width: 100%;" name="supplier">
                                     <?php
                                     $sql = mysqli_query($conn, "select * from supplier");
@@ -537,8 +537,8 @@ if (!login_check()) {
                                 </div>
                               </div>
                               <div class="form-group col-md-12 col-xs-12">
-                                <label for="barang" class="col-sm-2 control-label">Keterangan:</label>
-                                <div class="col-sm-10">
+                                <label for="barang" class="col-sm-3 control-label">Keterangan:</label>
+                                <div class="col-sm-9">
                                   <textarea class="form-control" rows="6" id="keterangan" name="keterangan" placeholder="Masukan Keterangan" required></textarea>
                                 </div>
                               </div>
