@@ -212,14 +212,7 @@ if (!login_check()) {
                               <td><?php echo ++$no_urut; ?></td>
                               <td><?php echo mysqli_real_escape_string($conn, $fill['nota']); ?></td>
                               <td><?php echo mysqli_real_escape_string($conn, $fill['tgl']); ?></td>
-                              <td>
-
-                                <?php if ($fill['pelanggan'] != 'customer') {
-
-                                  echo mysqli_real_escape_string($conn, $fill['pelanggan']);
-                                } ?>
-
-                              </td>
+                              <td><?php echo mysqli_real_escape_string($conn, $fill['tujuan']); ?></td>
                               <td>
                                 <?php if ($fill['pelanggan'] == 'customer') { ?>
 
@@ -260,11 +253,7 @@ if (!login_check()) {
                   <td><?php echo ++$no_urut; ?></td>
                   <td><?php echo mysqli_real_escape_string($conn, $fill['nota']); ?></td>
                   <td><?php echo mysqli_real_escape_string($conn, $fill['tgl']); ?></td>
-                  <td> <?php if ($fill['pelanggan'] != 'customer') {
-
-                          echo mysqli_real_escape_string($conn, $fill['pelanggan']);
-                        } ?>
-                  </td>
+                  <td><?php echo mysqli_real_escape_string($conn, $fill['tujuan']); ?></td>
                   <td>
 
                     <?php if ($fill['pelanggan'] == 'customer') { ?>

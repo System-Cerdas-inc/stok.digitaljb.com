@@ -174,6 +174,9 @@ if (!login_check()) {
                                 <td>
                                   <?php if ($chmod >= 3 || $_SESSION['jabatan'] == 'admin') { ?>
                                     <button type="button" class="btn btn-success btn-xs" onclick="window.location.href='surat_view?nota=<?php echo $fill['nota']; ?>'">Cetak</button>
+                                    <?php if ($fill['verifikasi'] == '0') { ?>
+                                      <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href='stok_keluar_konfirmasi?nota=<?php echo $fill['nota']; ?>'">Konfirmasi</button>
+                                    <?php } ?>
                                   <?php } else {
                                   } ?>
 
@@ -207,7 +210,9 @@ if (!login_check()) {
                     <td>
                       <?php if ($chmod >= 3 || $_SESSION['jabatan'] == 'admin') { ?>
                         <a class="btn btn-success btn-xs" href="surat_print?nota=<?php echo $fill['nota']; ?>" target="_blank">Cetak</a>
-                        <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href='stok_keluar_konfirmasi?nota=<?php echo $fill['nota']; ?>'">Konfirmasi</button>
+                        <?php if ($fill['verifikasi'] == '0') { ?>
+                          <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href='stok_keluar_konfirmasi?nota=<?php echo $fill['nota']; ?>'">Konfirmasi</button>
+                        <?php } ?>
                       <?php } ?>
 
 

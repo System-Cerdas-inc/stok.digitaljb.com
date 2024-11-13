@@ -108,7 +108,7 @@ if (!login_check()) {
 
             <!-- KONTEN BODY AWAL -->
             <!-- Default box -->
-            <div class="col-lg-6">
+            <div class="col-lg-5">
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Form Surat Jalan</h3>
@@ -142,12 +142,12 @@ if (!login_check()) {
 
                     <div class="form-group">
                       <label>Nomor Telepon Penerima</label>
-                      <input type="text" class="form-control" id="notelp" name="notelp">
+                      <input type="text" class="form-control" id="notelp" name="notelp" value="<?php echo $ai['notelp_tujuan']; ?>">
                     </div>
 
                     <div class="form-group">
                       <label>Alamat</label>
-                      <textarea class="form-control" rows="3" id="alamat" placeholder="Alamat Lengkap" name="alamat"></textarea>
+                      <textarea class="form-control" rows="3" id="alamat" placeholder="Alamat Lengkap" name="alamat"><?php echo $ai['tujuan']; ?></textarea>
                     </div>
 
                     <div class="form-group">
@@ -188,7 +188,7 @@ if (!login_check()) {
 
 
 
-            <div class="col-lg-6">
+            <div class="col-lg-7">
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Daftar Barang</h3>
@@ -304,7 +304,7 @@ if (!login_check()) {
                 echo "<script type='text/javascript'>window.location = 'surat_buat?q=$nota';</script>";
               } else {
 
-                $sql2 = "insert into surat values ('$nota','$nomor','$tgl','$pilih','$tujuan','$telp','$alamat','$driver','$nohp','$nopol','$by',0)";
+                $sql2 = "insert into surat values ('$nota','$nomor','$tgl','$pilih','$tujuan','$telp','$alamat','$driver','$nohp','$nopol',0,'$by',0)";
                 $result2 = mysqli_query($conn, $sql2);
                 if ($result2) {
 

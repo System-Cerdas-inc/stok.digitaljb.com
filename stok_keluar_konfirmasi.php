@@ -54,7 +54,7 @@ if (!login_check()) {
           $search = isset($_POST['search']) ? $_POST['search'] : '';
           $insert = isset($_POST['insert']) ? $_POST['insert'] : '';
 
-          $nota = $_GET['q'];
+          $nota = $_GET['nota'];
 
           $sql = mysqli_query($conn, "SELECT * FROM stok_keluar WHERE nota='$nota'");
           $ai = mysqli_fetch_assoc($sql);
@@ -108,7 +108,7 @@ if (!login_check()) {
 
             <!-- KONTEN BODY AWAL -->
             <!-- Default box -->
-            <div class="col-lg-6">
+            <div class="col-lg-5">
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Form Surat Jalan</h3>
@@ -188,7 +188,7 @@ if (!login_check()) {
 
 
 
-            <div class="col-lg-6">
+            <div class="col-lg-7">
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Daftar Barang</h3>
@@ -215,46 +215,57 @@ if (!login_check()) {
                 $no_urut = ($page - 1) * $rpp;
                 ?>
                 <div class="box-body table-responsive">
-                  <table class="data table table-hover table-bordered">
-                    <thead>
-                      <tr>
-                        <th style="width:10px">No</th>
-                        <th>Nama Barang</th>
-                        <th>Barcode Barang</th>
-                        <th style="width:10%">Jumlah </th>
-
-
-                      </tr>
-                    </thead>
-                    <?php
-                    error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
-                    while (($count < $rpp) && ($i < $tcount)) {
-                      mysqli_data_seek($result, $i);
-                      $fill = mysqli_fetch_array($result);
-
-                      if (isset($fill['barcode'])) {
-                        $escaped_barcode = mysqli_real_escape_string($conn, $fill['barcode']);
-                        $barc = $escaped_barcode;
-                      } else {
-                        // Tindakan alternatif jika $fill['barcode'] tidak terdefinisi atau null
-                        $barc = '-';
-                      }
-                    ?>
-                      <tbody>
+                  <form action="stok_keluar_konfirmasi_validasi" method="post" onsubmit="return confirm('Apakah anda yakin ingin memvalidasi stok keluar?');">
+                    <input type="hidden" name="nota" value="<?php echo $nota; ?>">
+                    <table class="data table table-hover table-bordered">
+                      <thead>
                         <tr>
-                          <td><?php echo ++$no_urut; ?></td>
-                          <td><?php echo mysqli_real_escape_string($conn, $fill['nama']); ?></td>
-                          <td><?php echo $barc; ?></td>
-                          <td><?php echo mysqli_real_escape_string($conn, $fill['jumlah']); ?></td>
-                        </tr>
-                      <?php
-                      $i++;
-                      $count++;
-                    }
+                          <th style="width:10px">No</th>
+                          <th>Nama Barang</th>
+                          <th>Barcode Barang</th>
+                          <th style="width:10%">Jumlah</th>
+                          <th style="width:10%">Kembali</th>
 
+
+                        </tr>
+                      </thead>
+                      <?php
+                      error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+                      while (($count < $rpp) && ($i < $tcount)) {
+                        mysqli_data_seek($result, $i);
+                        $fill = mysqli_fetch_array($result);
+
+                        if (isset($fill['barcode'])) {
+                          $escaped_barcode = mysqli_real_escape_string($conn, $fill['barcode']);
+                          $barc = $escaped_barcode;
+                        } else {
+                          // Tindakan alternatif jika $fill['barcode'] tidak terdefinisi atau null
+                          $barc = '-';
+                        }
                       ?>
-                      </tbody>
-                  </table>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="hidden" name="no[]" value="<?php echo $fill['no']; ?>">
+                              <span class="form-control" readonly><?php echo ++$no_urut; ?></span>
+                            </td>
+                            <td><span class="form-control" readonly><?php echo mysqli_real_escape_string($conn, $fill['nama']); ?></span></td>
+                            <td><span class="form-control" readonly><?php echo $barc; ?></span></td>
+                            <td><span class="form-control" readonly><?php echo mysqli_real_escape_string($conn, $fill['jumlah']); ?></span></td>
+                            <td>
+                              <input type="text" class="form-control" name="kembali[]" value="<?php echo mysqli_real_escape_string($conn, $fill['jumlah_kembali']); ?>">
+                            </td>
+                          </tr>
+                        <?php
+                        $i++;
+                        $count++;
+                      }
+
+                        ?>
+                        </tbody>
+                    </table>
+                    <button type="submit" name="validasi" class="btn btn-success pull-right col-lg-6 col-xs-6">Validasi Stok Keluar</button>
+                  </form>
                   <br>
                   <!-- /.box-body -->
                 </div>

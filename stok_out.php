@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <?php
@@ -102,45 +101,18 @@ if (!login_check()) {
           //fungsi menangkap barcode
           $check_data = 'hidden';
           if (isset($_POST['barcode'])) {
-            if (isset($_POST['new_bc'])) {
-              $new_sn = $_POST["new_sn"];
-              $kode_produk = $_POST["produk"];
-              $new_bc = $_POST["barcode"];
+            $barcode = mysqli_real_escape_string($conn, $_POST["barcode"]);
+            $sql1 = "SELECT `barang`.nama,`barang`.sisa AS avail, `barang`.`no` as `kode_no_barang`, `barang_detil`.* FROM `barang` INNER JOIN `barang_detil` ON `barang_detil`.`id_barang` = `barang`.`barcode` WHERE `barang_detil`.barcode='$barcode'";
+            $query = mysqli_query($conn, $sql1);
+            $data = mysqli_fetch_assoc($query);
+            $check_data = (mysqli_num_rows($query) > 0) ? null : 'hidden';
+            $nama = $data['nama'];
+            $kode = $data['kode_no_barang'];
+            $stok = $data['avail'];
+            $bc = $data['barcode'];
+            $stok_detil = $data['sisa'];
 
-              $sql1 = "SELECT `barang`.* FROM `barang` WHERE `barang`.`kode`='$kode_produk'";
-              $que1 = mysqli_query($conn, $sql1);
-              $dat1 = mysqli_fetch_assoc($que1);
-              $id_brg = $dat1["barcode"];
-              $sql2_check = "SELECT `barang_detil`.* FROM `barang_detil` WHERE `barang_detil`.`barcode`='$new_bc'";
-              $que2_check = mysqli_query($conn, $sql2_check);
-              $rows2_check = mysqli_num_rows($que2_check);
-              if ($rows2_check > 0) {
-                echo "<script type='text/javascript'>  alert('Barang dengan barcode $new_bc sudah ada!');</script>";
-                echo "<script type='text/javascript'>window.location = 'stok_out';</script>";
-              } else {
-                $sql2 = "INSERT INTO `barang_detil`(`id_barang`, `barcode`) VALUES ('$id_brg','$new_bc')";
-                $que2 = mysqli_query($conn, $sql2);
-                if ($que2) {
-                  echo "<script type='text/javascript'>  alert('Berhasil menambahkan Serial Number baru'); </script>";
-                  echo "<script type='text/javascript'>window.location = 'stok_out';</script>";
-                } else {
-                  echo "<script type='text/javascript'>  alert('Gagal, Periksa kembali input anda!'); </script>";
-                }
-              }
-            } else {
-              $barcode = mysqli_real_escape_string($conn, $_POST["barcode"]);
-              $sql1 = "SELECT `barang`.nama,`barang`.sisa AS avail, `barang_detil`.* FROM `barang` INNER JOIN `barang_detil` ON `barang_detil`.`id_barang` = `barang`.`barcode` WHERE `barang_detil`.barcode='$barcode'";
-              $query = mysqli_query($conn, $sql1);
-              $data = mysqli_fetch_assoc($query);
-              $check_data = (mysqli_num_rows($query) > 0) ? null : 'hidden';
-              $nama = $data['nama'];
-              $kode = $data['id'];
-              $stok = $data['avail'];
-              $bc = $data['barcode'];
-              $stok_detil = $data['sisa'];
-
-              $jumlah = '1';
-            }
+            $jumlah = '1';
           }
           ?>
           <!-- tambah -->
@@ -356,16 +328,16 @@ if (!login_check()) {
                         </div>
                       </div>
 
-                      
+
                       <?php if (isset($_POST['barcode'])) { ?>
-                          <div class="form-group col-md-12 col-xs-12">
-                            <?php if ($stok_detil < 1) { ?>
-                              <div class="alert alert-danger">
-                                <strong>Stok Dengan Serial Number Ini kosong</strong>
-                              </div>
-                            <?php }?>
-                          </div>
-                        <?php } ?>
+                        <div class="form-group col-md-12 col-xs-12">
+                          <?php if ($stok_detil < 1) { ?>
+                            <div class="alert alert-danger">
+                              <strong>Stok Dengan Serial Number Ini kosong</strong>
+                            </div>
+                          <?php } ?>
+                        </div>
+                      <?php } ?>
 
                       <div class="row <?= ($stok_detil == 0) ? 'hidden' : null ?>">
                         <div class="form-group col-md-12 col-xs-12">
@@ -513,9 +485,9 @@ if (!login_check()) {
                                     $sql = mysqli_query($conn, "select * from penanggung_jawab");
                                     while ($row = mysqli_fetch_assoc($sql)) {
                                       if ($penanggung_jawab == $row['kode'])
-                                        echo "<option value='" . $row['nama'] . "' selected='selected'>" . $row['notelp'] . " | " . $row['nama'] . "</option>";
+                                        echo "<option value='" . $row['kode'] . "' selected='selected'>" . $row['notelp'] . " | " . $row['nama'] . "</option>";
                                       else
-                                        echo "<option value='" . $row['nama'] . "'>" . $row['notelp'] . " | " . $row['nama'] . "</option>";
+                                        echo "<option value='" . $row['kode'] . "'>" . $row['notelp'] . " | " . $row['nama'] . "</option>";
                                     }
                                     ?>
                                   </select>
@@ -525,6 +497,12 @@ if (!login_check()) {
                                 <label for="barang" class="col-sm-3 control-label">Tujuan:</label>
                                 <div class="col-sm-9">
                                   <input class="form-control" rows="6" id="tujuan" name="tujuan" placeholder="Masukan tujuan" required>
+                                </div>
+                              </div>
+                              <div class="form-group col-md-12 col-xs-12">
+                                <label for="barang" class="col-sm-3 control-label">No Telp Penerima:</label>
+                                <div class="col-sm-9">
+                                  <input class="form-control" rows="6" id="notelp" name="notelp" placeholder="Masukan No Telp Penerima" required>
                                 </div>
                               </div>
                               <div class="form-group col-md-12 col-xs-12">
@@ -567,16 +545,22 @@ if (!login_check()) {
             if (isset($_POST["simpan"])) {
               if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $nota = mysqli_real_escape_string($conn, $_POST["notae"]);
-                $sup = mysqli_real_escape_string($conn, $_POST["penanggung_jawab"]);
+                $pj = mysqli_real_escape_string($conn, $_POST["penanggung_jawab"]);
                 $tgl = date('Y-m-d');
                 $usr = $_SESSION['nouser'];
                 $cab = $_SESSION['cab'];
                 $keterangan = mysqli_real_escape_string($conn, $_POST["keterangan"]);
                 $tujuan = mysqli_real_escape_string($conn, $_POST["tujuan"]);
+                $notelp = mysqli_real_escape_string($conn, $_POST["notelp"]);
+
+                $pj_data = mysqli_query($conn, "SELECT * FROM penanggung_jawab WHERE kode='$pj'");
+                $pj_row = mysqli_fetch_assoc($pj_data);
+                $pj_nama = $pj_row['nama'];
+                $pj_notelp = $pj_row['notelp'];
 
                 $kegiatan = "Stok Keluar";
 
-                $sql2 = "INSERT INTO stok_keluar (nota, cabang, tgl, penanggung_jawab, userid, keterangan, tujuan) VALUES( '$nota','$cab','$tgl','$sup','$usr', '$keterangan', '$tujuan')";
+                $sql2 = "INSERT INTO stok_keluar (nota, cabang, tgl, penanggung_jawab, notelp_pj, userid, keterangan, tujuan, notelp_tujuan) VALUES( '$nota','$cab','$tgl','$pj_nama','$pj_notelp','$usr', '$keterangan', '$tujuan', '$notelp')";
                 $insertan = mysqli_query($conn, $sql2);
 
                 $brg = "SELECT * FROM stok_keluar_daftar WHERE nota='$nota'";
@@ -584,22 +568,22 @@ if (!login_check()) {
 
                 $terbeli_b = 0;
                 $terbeli_s = 0;
-                while ($row = mysqli_fetch_assoc($cekbrg)) {
-                  $upd_1 = "UPDATE barang_detil SET terjual=terjual+$row[jumlah], sisa=sisa-$row[jumlah], jumlah_keluar_p=0, terjual_p=0 WHERE id='$row[kode_barang]'";
-                  $upd_q_1 = mysqli_query($conn, $upd_1);
-                  $sel_1 = "SELECT * FROM barang_detil WHERE id='$row[kode_barang]'";
-                  $cek_1 = mysqli_query($conn, $sel_1);
-                  $row_1 = mysqli_fetch_assoc($cek_1);
-                  $id_barang = $row_1['id_barang'];
-                  $upd_2 = "UPDATE barang SET terjual=terjual+$row[jumlah], sisa=sisa-$row[jumlah] WHERE barcode='$id_barang'";
-                  $upd_q_2 = mysqli_query($conn, $upd_2);
-                }
+                // while ($row = mysqli_fetch_assoc($cekbrg)) {
+                //   $upd_1 = "UPDATE barang_detil SET terjual=terjual+$row[jumlah], sisa=sisa-$row[jumlah], jumlah_keluar_p=0, terjual_p=0 WHERE id='$row[kode_barang]'";
+                //   $upd_q_1 = mysqli_query($conn, $upd_1);
+                //   $sel_1 = "SELECT * FROM barang_detil WHERE id='$row[kode_barang]'";
+                //   $cek_1 = mysqli_query($conn, $sel_1);
+                //   $row_1 = mysqli_fetch_assoc($cek_1);
+                //   $id_barang = $row_1['id_barang'];
+                //   $upd_2 = "UPDATE barang SET terjual=terjual+$row[jumlah], sisa=sisa-$row[jumlah] WHERE barcode='$id_barang'";
+                //   $upd_q_2 = mysqli_query($conn, $upd_2);
+                // }
 
                 $mut = "UPDATE mutasi SET status='berhasil' WHERE keterangan='$nota' AND kegiatan='stok keluar'";
                 $muta = mysqli_query($conn, $mut);
 
 
-                echo "<script type='text/javascript'>  alert('Stok selesai dimasukan!');</script>";
+                echo "<script type='text/javascript'>  alert('Stok selesai dikeluarkan!');</script>";
                 echo "<script type='text/javascript'>window.location = 'surat_buat?q=$nota';</script>";
               }
             } ?>
