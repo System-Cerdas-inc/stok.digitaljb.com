@@ -180,7 +180,8 @@ if (!login_check()) {
                         } ?>
 
                         <?php if ($chmod >= 4 || $_SESSION['jabatan'] == 'admin') { ?>
-                          <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='component/delete/delete_master?no=<?php echo $fill['no'] . '&'; ?>forward=<?php echo $forward . '&'; ?>forwardpage=<?php echo $forwardpage . '&'; ?>chmod=<?php echo $chmod; ?>'"><i class='fa fa-trash'></i></button>
+                          <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('component/delete/delete_master?no=<?php echo $fill['no'] . '&'; ?>forward=<?php echo $forward . '&'; ?>forwardpage=<?php echo $forwardpage . '&'; ?>chmod=<?php echo $chmod; ?>')"><i class='fa fa-trash'></i></button>
+
                         <?php } else {
                         } ?>
 
@@ -220,7 +221,14 @@ if (!login_check()) {
 
                     </tbody>
                   </table>
-
+                  <script>
+                    function confirmDelete(url) {
+                      var result = confirm("Apakah anda yakin ingin menghapus data ini?");
+                      if (result) {
+                        window.location.href = url;
+                      }
+                    }
+                  </script>
                 </div>
               </div>
             </div>
