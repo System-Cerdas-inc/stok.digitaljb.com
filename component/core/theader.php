@@ -45,8 +45,7 @@ $queryback="SELECT * FROM backset";
                                     <!-- User image -->
                                     <li class="user-header">
                                         <img src="<?php  echo $avatar; ?>" class="img-circle" alt="User Image">
-                                        <p>
-                  <?php  echo $nama; ?> - <?php  echo $jabatan; ?></p>
+                                        <p><?php  echo $nama; ?> - <span style="text-transform: capitalize;"><?php  echo $jabatan; ?></span></p>
                                     </li>
                                     </li>
                                     <!-- Menu Footer-->
