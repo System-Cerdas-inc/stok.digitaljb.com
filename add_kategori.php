@@ -160,7 +160,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
            <div class="form-group col-md-6 col-xs-12" >
                   <label for="nama" class="col-sm-3 control-label">Nama:</label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>" placeholder="Masukan Kelas siswa dan program diambil" maxlength="50">
+                    <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>" placeholder="-" maxlength="50">
                   </div>
                 </div>
         </div>
