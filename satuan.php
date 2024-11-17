@@ -143,8 +143,8 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
                            <div class="box">
             <div class="box-header">
             <h3 class="box-title">Data <?php echo $forward ?>  <span class="label label-default"><?php echo $totaldata; ?></span>
-					</h3>
-
+					</h3>&nbsp;
+          <a href="add_satuan" class="btn btn-info" >Tambah</a>
 			  <form method="post">
 			  <br/>
                 <div class="input-group input-group-sm" style="width: 250px;">
@@ -276,7 +276,6 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
 <div align="right"  style="padding-right:15px"  class="no-print" id="no-print" >
              <div align="left" class="no-print" id="no-print"> 
 </br>
-              <a href="add_satuan" class="btn bg-teal" >Tambah Satuan</a>
              </div>
                                </div>
                                 <!-- /.box-body -->
