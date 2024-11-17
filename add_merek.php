@@ -66,12 +66,12 @@ $insert = $_POST['insert'];
 
 <ol class="breadcrumb ">
 <li><a href="<?php echo $_SESSION['baseurl']; ?>">Dashboard </a></li>
-<li><a href="<?php echo $halaman;?>"><?php echo $dataapa ?></a></li>
+<li><a href="<?php echo $halaman;?>" style="text-transform:capitalize"><?php echo $dataapa ?></a></li>
 <?php
 
 if ($search != null || $search != "") {
 ?>
- <li> <a href="<?php echo $halaman;?>">Data <?php echo $dataapa ?></a></li>
+ <li> <a href="<?php echo $halaman;?>" style="text-transform:capitalize">Data <?php echo $dataapa ?></a></li>
   <li class="active"><?php
     echo $search;
 ?></li>
@@ -160,7 +160,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
 				   <div class="form-group col-md-6 col-xs-12" >
                   <label for="nama" class="col-sm-3 control-label">Nama Merek:</label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>" placeholder="Masukan Kelas siswa dan program diambil" maxlength="50">
+                    <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>" placeholder="-" maxlength="50">
                   </div>
                 </div>
 				</div>
