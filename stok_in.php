@@ -128,12 +128,13 @@ if (!login_check()) {
               }
             } else {
               $barcode = mysqli_real_escape_string($conn, $_GET["barcode"]);
-              $sql1 = "SELECT `barang`.nama,`barang`.sisa AS avail, `barang_detil`.* FROM `barang` INNER JOIN `barang_detil` ON `barang_detil`.`id_barang` = `barang`.`barcode` WHERE `barang_detil`.barcode='$barcode'";
+              $sql1 = "SELECT `barang`.no as kode_barang_ori,`barang`.nama,`barang`.sisa AS avail, `barang_detil`.* FROM `barang` INNER JOIN `barang_detil` ON `barang_detil`.`id_barang` = `barang`.`barcode` WHERE `barang_detil`.barcode='$barcode'";
               $query = mysqli_query($conn, $sql1);
               $data = mysqli_fetch_assoc($query);
               $check_data = (mysqli_num_rows($query) > 0) ? null : 'hidden';
               $nama = $data['nama'];
               $kode = $data['id'];
+              $kode_barang_ori = $data['kode_barang_ori'];
               $stok = $data['avail'];
               $bc = $data['barcode'];
               $stok_detil = $data['sisa'];
@@ -149,6 +150,7 @@ if (!login_check()) {
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
               $nota = mysqli_real_escape_string($conn, $_POST["nota"]);
               $kode = mysqli_real_escape_string($conn, $_POST["kode"]);
+              $kode_barang_ori = mysqli_real_escape_string($conn, $_POST["kode_barang_ori"]);
               $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
               $bc = mysqli_real_escape_string($conn, $_POST["bc"]);
               $jumlah = mysqli_real_escape_string($conn, $_POST["jumlah"]);
@@ -166,19 +168,14 @@ if (!login_check()) {
               $jml_all_tb_br = $row_brg['terbeli'] + $jumlah;
 
               //cek data stok_masuk_daftar
-              $cek_stok_masuk = mysqli_query($conn, "SELECT * FROM stok_masuk_daftar WHERE nota='$nota' AND kode_barang='$kode'");
+              $cek_stok_masuk = mysqli_query($conn, "SELECT * FROM stok_masuk_daftar WHERE nota='$nota' AND kode_barang='$kode_barang_ori'");
               if (mysqli_num_rows($cek_stok_masuk) > 0) {
                 $q = mysqli_fetch_assoc($cek_stok_masuk);
                 $cart = $q['jumlah'];
                 $newcart = $cart + $jumlah;
-                $sqlu = "UPDATE stok_masuk_daftar SET jumlah='$newcart' where nota='$nota' AND kode_barang='$kode'";
+                $sqlu = "UPDATE stok_masuk_daftar SET jumlah='$newcart' where nota='$nota' AND kode_barang='$kode_barang_ori'";
                 $ucart = mysqli_query($conn, $sqlu);
                 if ($ucart) {
-
-
-                  // $sql3 = "UPDATE mutasi SET jumlah='$newcart' WHERE keterangan='$nota' AND kegiatan='$kegiatan' ";
-                  // $upd = mysqli_query($conn, $sql3);
-
                   echo "<script type='text/javascript'>  alert('Jumlah Stok masuk telah ditambah!');</script>";
                   echo "<script type='text/javascript'>window.location = '$halaman';</script>";
                 } else {
@@ -186,12 +183,12 @@ if (!login_check()) {
                 }
               } else {
 
-                $sql2 = "INSERT INTO stok_masuk_daftar (nota, kode_barang, nama, jumlah, barcode) VALUES( '$nota','$kode','$nama','$jumlah','$barcode_new')";
+                $sql2 = "INSERT INTO stok_masuk_daftar (nota, kode_barang, nama, jumlah, barcode) VALUES( '$nota','$kode_barang_ori','$nama','$jumlah','$barcode_new')";
                 $insertan = mysqli_query($conn, $sql2);
 
                 if ($insertan) {
 
-                  $sql9 = "INSERT INTO mutasi (namauser, tgl, kodebarang, sisa, jumlah, kegiatan, keterangan, status) VALUES('$usr','$today','$kode','$jml_all_br','$jumlah','$kegiatan','$nota','pending')";
+                  $sql9 = "INSERT INTO mutasi (namauser, tgl, kodebarang, sisa, jumlah, kegiatan, keterangan, status) VALUES('$usr','$today','$kode_barang_ori','$jml_all_br','$jumlah','$kegiatan','$nota','pending')";
                   $mutasi = mysqli_query($conn, $sql9);
 
                   echo "<script type='text/javascript'>  alert('Produk telah dimasukan dalam daftar!');</script>";
@@ -287,9 +284,8 @@ if (!login_check()) {
                     <div>
                       <video id="video" width="100%" height="200" style="border: 1px solid gray"></video>
                     </div>
-
                     <div id="sourceSelectPanel" style="display:none" class="form-group">
-                      <select id="sourceSelect" style="col-sm-8" class="form-control">
+                      <select id="sourceSelect" class="form-control">
                       </select>
                     </div>
                     <br>
@@ -353,6 +349,7 @@ if (!login_check()) {
                           <div class="col-sm-10">
                             <input type="text" class="form-control" readonly id="nama" name="nama" value="<?php echo $nama; ?>">
                             <input class="form-control" readonly id="kode" name="kode" value="<?php echo $kode; ?>">
+                            <input class="form-control" readonly id="kode_barang_ori" name="kode_barang_ori" value="<?php echo $kode_barang_ori; ?>">
                             <input hidden class="form-control" readonly id="nota" name="nota" value="<?php echo autoNumber(); ?>">
                             <input type="hidden" class="form-control" readonly id="bc" name="bc" value="<?php echo $bc; ?>">
                             <input class="form-control" readonly id="barcode_new" name="barcode_new" value="<?= isset($_GET["barcode"]) ? $_GET["barcode"] : ""; ?>">
