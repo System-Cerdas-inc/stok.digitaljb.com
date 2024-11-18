@@ -335,7 +335,7 @@ function myFunction() {
 
                 <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href='set_chmod?no=<?php  echo $fill['nama']; ?>'">HAK AKSES</button>
 
-               <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo "jabatan".'&';?>forwardpage=<?php echo 'add_jabatan'.'&'; ?>chmod=<?php echo $chmod; ?>'">Hapus</button>
+               <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=add_<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>')">Hapus</button>
                <?php } else {}?>
                </td></tr><?php
                ;
@@ -373,7 +373,7 @@ function myFunction() {
                 <?php  if ( $fill['nama'] != 'admin') { ?>
                   <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href='set_chmod?no=<?php  echo $fill['nama']; ?>'">HAK AKSES</button>
                   
-                 <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo "jabatan".'&';?>forwardpage=<?php echo 'add_jabatan'.'&'; ?>chmod=<?php echo $chmod; ?>'">Hapus</button>
+                 <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=add_<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>')">Hapus</button>
                <?php } } else {}?>
                </td></tr>
                <?php
@@ -390,7 +390,14 @@ function myFunction() {
                            <!-- /.box-body --><p>Note: Jabatan admin dibuat agar tidak bisa dihapus/edit</p>
                        </div>
                     </div>
-
+                    <script>
+                    function confirmDelete(url) {
+                      var result = confirm("Apakah anda yakin ingin menghapus data ini?");
+                      if (result) {
+                        window.location.href = url;
+                      }
+                    }
+                  </script>
                     <!-- /.row -->
                     <!-- Main row -->
                     <div class="row">

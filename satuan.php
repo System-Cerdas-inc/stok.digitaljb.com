@@ -221,7 +221,7 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
 					 <?php } else {}?>
 
 					 <?php	if ($chmod >= 4 || $_SESSION['jabatan'] == 'admin') { ?>
-					<button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>'">Hapus</button>
+					<button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>')">Hapus</button>
 					 <?php } else {}?>
 
            <?php  if ($chmod >= 4 || $_SESSION['jabatan'] == 'admin') { ?>
@@ -257,7 +257,7 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
 					 <?php } else {}?>
 
 					 <?php	if ($chmod >= 4 || $_SESSION['jabatan'] == 'admin') { ?>
-             <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>'">Hapus</button>
+             <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>')">Hapus</button>
    					 <?php } else {}?>
 
              <?php  if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') { ?>
@@ -295,6 +295,14 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
             </div>
 
 
+            <script>
+                    function confirmDelete(url) {
+                      var result = confirm("Apakah anda yakin ingin menghapus data ini?");
+                      if (result) {
+                        window.location.href = url;
+                      }
+                    }
+                  </script>
 
 
 

@@ -404,7 +404,7 @@ if (!login_check()) {
 
                     <h4>Klik Tombol dibawah untuk melakukan reset terhadap data aplikasi, data barang, data transaksi dan data lainnya yang pernah di input user akan dihapus. Reset akan bersifat permanen dan tidak bisa di kembalikan</h4><br>
 
-                    <form method="post" action="set_general">
+                    <form method="post" action="set_general" onsubmit="return confirm('Anda yakin mau reset data aplikasi?')">
                       <button name="truncate" type="submit" class="btn bg-maroon pull-left">RESET DATA APLIKASI</button>
                     </form>
 
