@@ -352,20 +352,23 @@ if (!login_check()) {
                         <div class="tab-pane" id="tab_2">
                           <div class="row">
                             <div class="col-md-6 col-sm-12">
-                              <div>
-                                <button class="btn btn-info" type="button" id="startButton">Open Kamera</button>
-                                <button class="btn btn-info" type="button" id="resetButton">Reset</button>
-                              </div>
-                              <br>
-                              <div>
-                                <video id="video" width="300" height="200" style="border: 1px solid gray"></video>
-                              </div>
 
-                              <div id="sourceSelectPanel" style="display:none">
-                                <label for="sourceSelect">Ubah kamera:</label>
-                                <select id="sourceSelect" style="max-width:400px">
+                              <div class="row" style="padding-bottom: 25px;">
+                                <div class="col-sm-6">
+                                  <button class="btn btn-info btn-block" type="button" id="startButton">Open Kamera</button>
+                                </div>
+                                <div class="col-sm-6">
+                                  <button class="btn btn-info btn-block" type="button" id="resetButton">Reset</button>
+                                </div>
+                              </div>
+                              <div>
+                                <video id="video" width="100%" height="200" style="border: 1px solid gray"></video>
+                              </div>
+                              <div id="sourceSelectPanel" style="display:none" class="form-group">
+                                <select id="sourceSelect" class="form-control">
                                 </select>
                               </div>
+
                             </div>
 
                             <!-- <label>Result:</label>
@@ -579,7 +582,7 @@ if (!login_check()) {
             } else {
               $avatar = "dist/upload/index.jpg";
               $sql2 = "INSERT into barang (kode, sku, nama, hargabeli, hargajual, keterangan, kategori, satuan, terjual, terbeli, sisa, stokmin, barcode, brand, lokasi, expired, warna, ukuran, avatar) 
-              values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', ".($stok_new == '' ? '0' : $stok_new).", '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
+              values('$kode', '$sku', '$nama', '0', '0', NULL, NULL, '$satuan', '0', '0', " . ($stok_new == '' ? '0' : $stok_new) . ", '$stokmin', '$barcode', '$brand', NULL, NULL, NULL, NULL, '$avatar');";
               $res_sql2 = mysqli_query($conn, $sql2);
               if ($res_sql2) {
                 $sql_c = "SELECT * from barang_detil where id_barang = '$barcode'";

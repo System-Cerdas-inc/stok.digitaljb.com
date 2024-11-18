@@ -142,12 +142,12 @@ if (!login_check()) {
 
                     <div class="form-group">
                       <label>Nomor Telepon Penerima</label>
-                      <input type="text" class="form-control" id="notelp" name="notelp">
+                      <input type="text" class="form-control" id="notelp" name="notelp" value="<?php echo $ai['notelp_tujuan']; ?>">
                     </div>
 
                     <div class="form-group">
                       <label>Alamat</label>
-                      <textarea class="form-control" rows="3" id="alamat" placeholder="Alamat Lengkap" name="alamat"></textarea>
+                      <textarea class="form-control" rows="3" id="alamat" placeholder="Alamat Lengkap" name="alamat"><?= $ai['tujuan'] ?></textarea>
                     </div>
 
                     <div class="form-group">
@@ -162,7 +162,7 @@ if (!login_check()) {
 
                     <div class="form-group">
                       <label>Nomor Polisi Kendaraan (Opsional)</label>
-                      <input type="text" class="form-control" placeholder="Nomor Plat Kendaraan" name="nopol">
+                      <input type="text" class="form-control" placeholder="Nomor Plat Kendaraan" name="nopol" value="<?php echo $ai['nopol']; ?>">
                     </div>
 
                     <div class="form-group">

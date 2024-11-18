@@ -18,7 +18,7 @@ include 'configuration/config_connect.php';
                 <div class="pull-right hidden-xs">
                     <b>Version</b> <?php echo $nama;?>
                 </div>
-                <strong>Copyright ©2023 Code Null.</strong> All rights
+                <strong>Copyright ©2023 DJB.</strong> All rights
                 reserved. <?php echo $footer;?>
 				</div>
             </footer>

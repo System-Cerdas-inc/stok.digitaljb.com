@@ -242,7 +242,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
                   <label for="password" class="col-sm-3 control-label">Kata Sandi:</label>
                   <div class="col-sm-9">
                     <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>" placeholder="Masukan Password" maxlength="50" required>
-                    <input type="checkbox" onclick="myFunction()">Show Password
+                    <input type="checkbox" onclick="$('#password').attr('type', this.checked ? 'text' : 'password');">Show Password
                   </div>
                 </div>
         </div>
@@ -406,12 +406,6 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
 
 </div>
 </div>
-
-<script>
-function myFunction() {
-    document.getElementById("Myform").submit();
-}
-</script>
 
     <!-- KONTEN BODY AKHIR -->
 

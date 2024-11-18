@@ -124,86 +124,92 @@ if (!login_check()) {
               $kode = mysqli_real_escape_string($conn, $_POST["kode"]);
               $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
               $bc = mysqli_real_escape_string($conn, $_POST["bc"]);
+              $stok_detil = mysqli_real_escape_string($conn, $_POST["stok_detil"]);
               $jumlah = mysqli_real_escape_string($conn, $_POST["jumlah"]);
               $barcode_new = mysqli_real_escape_string($conn, $_POST["barcode_new"]);
 
-              $kegiatan = "Stok Keluar";
-              $status = "pending";
-              $usr = $_SESSION['nama'];
-              $today = date('Y-m-d');
-
-              $q_brg = mysqli_query($conn, "SELECT * FROM barang WHERE kode='$kode'");
-              $row_brg = mysqli_fetch_assoc($q_brg);
-              //jumlah barang all
-              $jml_all_br = $row_brg['sisa'] + $jumlah;
-              $jml_all_tb_br = $row_brg['terbeli'] + $jumlah;
-
-              //cek data stok_keluar_daftar
-              $cek_stok_keluar = mysqli_query($conn, "SELECT * FROM stok_keluar_daftar WHERE nota='$nota' AND kode_barang='$kode'");
-              if (mysqli_num_rows($cek_stok_keluar) > 0) {
-                $q = mysqli_fetch_assoc($cek_stok_keluar);
-                $cart = $q['jumlah'];
-                $newcart = $cart + $jumlah;
-                $sqlu = "UPDATE stok_keluar_daftar SET jumlah='$newcart' where nota='$nota' AND kode_barang='$kode'";
-                $ucart = mysqli_query($conn, $sqlu);
-                if ($ucart) {
-                  $sql3 = "UPDATE mutasi SET jumlah='$newcart' WHERE keterangan='$nota' AND kegiatan='$kegiatan' ";
-                  $upd = mysqli_query($conn, $sql3);
-
-                  echo "<script type='text/javascript'>  alert('Jumlah Stok keluar telah ditambah!');</script>";
-                  echo "<script type='text/javascript'>window.location = '$halaman';</script>";
-                } else {
-                  echo "<script type='text/javascript'>  alert('GAGAL, Periksa kembali input anda!');</script>";
-                }
+              if ($stok_detil < $jumlah) {
+                echo "<script type='text/javascript'>  alert('Stok barang tidak mencukupi!');</script>";
+                echo "<script type='text/javascript'>window.location = '$halaman';</script>";
               } else {
+                $kegiatan = "Stok Keluar";
+                $status = "pending";
+                $usr = $_SESSION['nama'];
+                $today = date('Y-m-d');
 
-                $sql2 = "INSERT INTO stok_keluar_daftar (nota, kode_barang, nama, jumlah, barcode) VALUES( '$nota','$kode','$nama','$jumlah','$barcode_new')";
-                $insertan = mysqli_query($conn, $sql2);
-                if ($insertan) {
+                $q_brg = mysqli_query($conn, "SELECT * FROM barang WHERE kode='$kode'");
+                $row_brg = mysqli_fetch_assoc($q_brg);
+                //jumlah barang all
+                $jml_all_br = $row_brg['sisa'] + $jumlah;
+                $jml_all_tb_br = $row_brg['terbeli'] + $jumlah;
 
-                  $sql9 = "INSERT INTO mutasi (namauser, tgl, kodebarang, sisa, jumlah, kegiatan, keterangan, status) VALUES('$usr','$today','$kode','$jml_all_br','$jumlah','$kegiatan','$nota','pending')";
-                  $mutasi = mysqli_query($conn, $sql9);
+                //cek data stok_keluar_daftar
+                $cek_stok_keluar = mysqli_query($conn, "SELECT * FROM stok_keluar_daftar WHERE nota='$nota' AND kode_barang='$kode'");
+                if (mysqli_num_rows($cek_stok_keluar) > 0) {
+                  $q = mysqli_fetch_assoc($cek_stok_keluar);
+                  $cart = $q['jumlah'];
+                  $newcart = $cart + $jumlah;
+                  $sqlu = "UPDATE stok_keluar_daftar SET jumlah='$newcart' where nota='$nota' AND kode_barang='$kode'";
+                  $ucart = mysqli_query($conn, $sqlu);
+                  if ($ucart) {
+                    $sql3 = "UPDATE mutasi SET jumlah='$newcart' WHERE keterangan='$nota' AND kegiatan='$kegiatan' ";
+                    $upd = mysqli_query($conn, $sql3);
 
-                  echo "<script type='text/javascript'>  alert('Produk telah dimasukan dalam daftar!');</script>";
-                  echo "<script type='text/javascript'>window.location = '$halaman';</script>";
+                    echo "<script type='text/javascript'>  alert('Jumlah Stok keluar telah ditambah!');</script>";
+                    echo "<script type='text/javascript'>window.location = '$halaman';</script>";
+                  } else {
+                    echo "<script type='text/javascript'>  alert('GAGAL, Periksa kembali input anda!');</script>";
+                  }
                 } else {
-                  echo "<script type='text/javascript'>  alert('GAGAL memasukan produk, periksa kembali!');</script>";
+
+                  $sql2 = "INSERT INTO stok_keluar_daftar (nota, kode_barang, nama, jumlah, barcode) VALUES( '$nota','$kode','$nama','$jumlah','$barcode_new')";
+                  $insertan = mysqli_query($conn, $sql2);
+                  if ($insertan) {
+
+                    $sql9 = "INSERT INTO mutasi (namauser, tgl, kodebarang, sisa, jumlah, kegiatan, keterangan, status) VALUES('$usr','$today','$kode','$jml_all_br','$jumlah','$kegiatan','$nota','pending')";
+                    $mutasi = mysqli_query($conn, $sql9);
+
+                    echo "<script type='text/javascript'>  alert('Produk telah dimasukan dalam daftar!');</script>";
+                    echo "<script type='text/javascript'>window.location = '$halaman';</script>";
+                  } else {
+                    echo "<script type='text/javascript'>  alert('GAGAL memasukan produk, periksa kembali!');</script>";
+                  }
                 }
-              }
 
-              //update barang
-              $q_jml_brg = mysqli_query($conn, "SELECT * FROM barang_detil WHERE barcode='$barcode_new';");
-              $row_jml_brg = mysqli_fetch_assoc($q_jml_brg);
-              if (mysqli_num_rows($q_jml_brg) > 0) {
-                //update stok berdasarkan barcode
-                $jml_br = $row_jml_brg['jumlah_keluar'] + $jumlah;
-                $jml_tb_br = $row_jml_brg['terbeli'] + $jumlah;
+                //update barang
+                $q_jml_brg = mysqli_query($conn, "SELECT * FROM barang_detil WHERE barcode='$barcode_new';");
+                $row_jml_brg = mysqli_fetch_assoc($q_jml_brg);
+                if (mysqli_num_rows($q_jml_brg) > 0) {
+                  //update stok berdasarkan barcode
+                  $jml_br = $row_jml_brg['jumlah_keluar'] + $jumlah;
+                  $jml_tb_br = $row_jml_brg['terbeli'] + $jumlah;
 
-                $q_detail_stok = mysqli_query($conn, "UPDATE barang_detil SET jumlah_keluar_p='$jml_br', terjual_p='$jml_tb_br' WHERE id='" . $row_jml_brg['id'] . "';");
-                if ($q_detail_stok) {
-                  //update jumlah barang all
-                  // $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
-                }
-              } else {
-                //cek jumlah barcode pada barang
-                $cek_bc_all = mysqli_query($conn, "SELECT * FROM barang a, barang_detil b WHERE a.sku = b.id_barang AND a.kode='$kode' AND b.barcode = '" . $barcode_new . "';");
-                if (mysqli_num_rows($cek_bc_all) == 1) {
-                  $row_cek_bc_all = mysqli_fetch_assoc($cek_bc_all);
-                  //update stok dengan barcode yg ada
-                  $jml_br2 = $row_cek_bc_all['jumlah_keluar'] + $jumlah;
-                  $jml_tb_br2 = $row_cek_bc_all['terbeli'] + $jumlah;
-
-                  $q_detail_stok = mysqli_query($conn, "UPDATE barang_detil SET jumlah_keluar_p='$jml_br2', terjual_p='$jml_tb_br2' WHERE id='" . $row_cek_bc_all['id'] . "';");
+                  $q_detail_stok = mysqli_query($conn, "UPDATE barang_detil SET jumlah_keluar_p='$jml_br', terjual_p='$jml_tb_br' WHERE id='" . $row_jml_brg['id'] . "';");
                   if ($q_detail_stok) {
                     //update jumlah barang all
                     // $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
                   }
                 } else {
-                  //update stok barcode baru
-                  $q_detail_stok = mysqli_query($conn, "INSERT INTO barang_detil (id_barang, barcode, terbeli, jumlah_keluar) VALUES('SKU$kode','$barcode_new','$jumlah','$jumlah')");
-                  if ($q_detail_stok) {
-                    //update jumlah barang all
-                    // $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
+                  //cek jumlah barcode pada barang
+                  $cek_bc_all = mysqli_query($conn, "SELECT * FROM barang a, barang_detil b WHERE a.sku = b.id_barang AND a.kode='$kode' AND b.barcode = '" . $barcode_new . "';");
+                  if (mysqli_num_rows($cek_bc_all) == 1) {
+                    $row_cek_bc_all = mysqli_fetch_assoc($cek_bc_all);
+                    //update stok dengan barcode yg ada
+                    $jml_br2 = $row_cek_bc_all['jumlah_keluar'] + $jumlah;
+                    $jml_tb_br2 = $row_cek_bc_all['terbeli'] + $jumlah;
+
+                    $q_detail_stok = mysqli_query($conn, "UPDATE barang_detil SET jumlah_keluar_p='$jml_br2', terjual_p='$jml_tb_br2' WHERE id='" . $row_cek_bc_all['id'] . "';");
+                    if ($q_detail_stok) {
+                      //update jumlah barang all
+                      // $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
+                    }
+                  } else {
+                    //update stok barcode baru
+                    $q_detail_stok = mysqli_query($conn, "INSERT INTO barang_detil (id_barang, barcode, terbeli, jumlah_keluar) VALUES('SKU$kode','$barcode_new','$jumlah','$jumlah')");
+                    if ($q_detail_stok) {
+                      //update jumlah barang all
+                      // $sql_update_jml_all_barang = mysqli_query($conn, "UPDATE barang SET sisa='$jml_all_br', terbeli='$jml_all_tb_br' WHERE kode='$kode';");
+                    }
                   }
                 }
               }

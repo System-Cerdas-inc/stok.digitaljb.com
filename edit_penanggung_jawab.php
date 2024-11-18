@@ -35,10 +35,10 @@ menu();
 <?php
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 include "configuration/config_chmod.php";
-$halaman = "kategori"; // halaman
-$dataapa = "kategori"; // data
-$tabeldatabase = "kategori"; // tabel database
-$chmod = $chmenu3; // Hak akses Menu
+$halaman = "penanggung_jawab"; // data
+$dataapa = "Penanggung Jawab"; // data apa
+$tabeldatabase = "penanggung_jawab"; // tabel database
+$chmod = $chmenu2; // Hak akses Menu
 $forward = mysqli_real_escape_string($conn, $tabeldatabase); // tabel database
 $forwardpage = mysqli_real_escape_string($conn, $halaman); // halaman
 $search = $_POST['search'];
@@ -115,7 +115,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
       <?php
     error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 
-    $kode=$nama="";
+    $kode=$nama=$tgldaftar=$alamat=$nohp="";
     $no = $_GET["no"];
     $insert = '1';
 
@@ -132,6 +132,10 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
 
           $kode = $fill["kode"];
           $nama = $fill["nama"];
+         
+          $alamat = $fill["alamat"];
+          $nohp = $fill["notelp"];
+        
                   $insert = '3';
 
     }
@@ -143,25 +147,44 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
           <form class="form-horizontal" method="post" action="add_<?php echo $halaman; ?>" id="Myform">
               <div class="box-body">
 
-                <div class="row">
-                        <div class="form-group col-md-6 col-xs-12" >
-                          <label for="kode" class="col-sm-3 control-label">Kode:</label>
-                          <div class="col-sm-9">
-                           <?php  if($no == null || $no ==""){ ?>
-                            <input type="text" class="form-control" id="kode" name="kode" value="<?php echo autoNumber(); ?>" maxlength="50" required readonly>
-                          <?php }else{ ?>
-                     <input type="text" class="form-control" id="kode" name="kode" value="<?php echo $kode; ?>"  maxlength="50" required readonly>
-                  <?php } ?>
-                  </div>
-                        </div>
+        <div class="row">
+                <div class="form-group col-md-6 col-xs-12" >
+                  <label for="kode" class="col-sm-3 control-label">Kode Penanggung Jawab:</label>
+                  <div class="col-sm-9">
+                   <?php  if($no == null || $no ==""){ ?>
+                    <input type="text" class="form-control" id="kode" name="kode" value="<?php echo autoNumber(); ?>" maxlength="50" required readonly>
+                  <?php }else{ ?>
+             <input type="text" class="form-control" id="kode" name="kode" value="<?php echo $kode; ?>"  maxlength="50" required readonly>
+          <?php } ?>
+          </div>
                 </div>
+        </div>
 
         <div class="row">
            <div class="form-group col-md-6 col-xs-12" >
-                  <label for="nama" class="col-sm-3 control-label">Nama:</label>
+                  <label for="nama" class="col-sm-3 control-label">Nama Penanggung Jawab:</label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>" placeholder="-" maxlength="50">
+                    <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>" placeholder="Masukan Nama" maxlength="50" required>
                   </div>
+                </div>
+        </div>
+
+       
+        <div class="row">
+           <div class="form-group col-md-6 col-xs-12" >
+                  <label for="nohp" class="col-sm-3 control-label">No Telpon:</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="nohp" name="nohp" value="<?php echo $nohp; ?>" placeholder="Masukan Nomor Handphone" maxlength="50" required>
+                  </div>
+                </div>
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6 col-xs-12" >
+                  <label for="alamat" class="col-sm-3 control-label">Alamat:</label>
+                  <div class="col-sm-9">
+                  <textarea class="form-control" rows="3" id="alamat" name="alamat" maxlength="255" placeholder="Masukan alamat lengkap" required><?php echo $alamat; ?></textarea>
+                   </div>
                 </div>
         </div>
 
@@ -186,6 +209,9 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
 
           $kode = mysqli_real_escape_string($conn, $_POST["kode"]);
           $nama = mysqli_real_escape_string($conn, $_POST["nama"]);
+         
+          $nohp = mysqli_real_escape_string($conn, $_POST["nohp"]);
+          $alamat = mysqli_real_escape_string($conn, $_POST["alamat"]);
           $insert = ($_POST["insert"]);
 
 
@@ -194,7 +220,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
 
               if(mysqli_num_rows($result)>0){
           if($chmod >= 3 || $_SESSION['jabatan'] == 'admin'){
-                  $sql1 = "update $tabeldatabase set nama='$nama' where kode='$kode'";
+                  $sql1 = "update $tabeldatabase set nama='$nama',notelp='$nohp',alamat='$alamat' where kode='$kode'";
                   $updatean = mysqli_query($conn, $sql1);
                   echo "<script type='text/javascript'>  alert('Berhasil, Data telah diupdate!'); </script>";
                   echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";
@@ -204,8 +230,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
           }
         }
       else if(( $chmod >= 2 || $_SESSION['jabatan'] == 'admin')){
-
-           $sql2 = "insert into $tabeldatabase values( '$kode','$nama','')";
+           $sql2 = "insert into $tabeldatabase values( '$kode','$nama','$nohp','$alamat',null)";
            if(mysqli_query($conn, $sql2)){
            echo "<script type='text/javascript'>  alert('Berhasil, Data telah disimpan!'); </script>";
            echo "<script type='text/javascript'>window.location = '$forwardpage';</script>";

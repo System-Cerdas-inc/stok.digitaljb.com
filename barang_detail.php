@@ -147,8 +147,8 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
   <div id="main">
    <div class="container-fluid">
 
-<div class="box-body col-md-3">
-<!-- Profile Image -->
+<div class="box-body col-md-6">
+  <div class="row col-md-12">
           <div class="box box-primary">
             <div class="box-body box-profile">
 
@@ -173,10 +173,36 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
+  </div>
+  <div class="row col-md-12">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="text-align: center;vertical-align:middle" rowspan="2">Serial Number</th>
+          <th style="text-align: center;vertical-align:middle" colspan="3">Stok</th>
+        </tr>
+        <tr>
+          <th style="text-align: center;vertical-align:middle">Masuk</th>
+          <th style="text-align: center;vertical-align:middle">Keluar</th>
+          <th style="text-align: center;vertical-align:middle">Available</th>
+        </tr>
+      </thead>
+      <?php $sql_sn = "SELECT * FROM barang_detil WHERE id_barang = '$barcode'";
+            $query_sn = mysqli_query($conn,$sql_sn);
+            $i = 1;
+            while ($data_sn = mysqli_fetch_array($query_sn)) { ?>
+      <tr>
+        <tr>
+          <td><?= $data_sn['barcode']; ?></td>
+          <td class="text-center"><?= $data_sn['terbeli']; ?></td>
+          <td class="text-center"><?= $data_sn['terjual']; ?></td>
+          <td class="text-center"><?= $data_sn['sisa']; ?></td>
+        </tr>
+      </tr>
+       <?php $i++; } ?>
+    </table>
+  </div>
 </div>
-
-<div class="box-body col-md-2">
-    </div>
 
 <div class="box-body col-md-6">
 <div class="tab-pane" id="settings">
@@ -186,7 +212,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
                     <label for="inputName" class="col-sm-2 control-label">SKU</label>
 
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="<?php echo $sku;?>" readonly="readonly" placeholder="sku">
+                      <input type="text" class="form-control" value="<?php echo $sku;?>" readonly="readonly">
                     </div>
                   </div>
 
@@ -212,7 +238,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
                     <label for="inputName" class="col-sm-2 control-label">Merek</label>
 
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="<?php echo $data['brand'];?>" readonly="readonly" placeholder="sku">
+                      <input type="text" class="form-control" value="<?php echo $data['brand'];?>" readonly="readonly">
                     </div>
                   </div>
 
@@ -221,7 +247,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
                     <label for="inputName" class="col-sm-2 control-label">Satuan</label>
 
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="<?php echo $data['satuan'];?>" readonly="readonly" placeholder="sku">
+                      <input type="text" class="form-control" value="<?php echo $data['satuan'];?>" readonly="readonly">
                     </div>
                   </div>
 
@@ -230,7 +256,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
                     <label for="inputName" class="col-sm-2 control-label">Expired</label>
 
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="<?php echo $data['expired'];?>" readonly="readonly" placeholder="sku">
+                      <input type="text" class="form-control" value="<?php echo $data['expired'];?>" readonly="readonly">
                     </div>
                   </div>
 
@@ -239,7 +265,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
                     <label for="inputName" class="col-sm-2 control-label">Lokasi</label>
 
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" value="<?php echo $data['lokasi'];?>" readonly="readonly" placeholder="sku">
+                      <input type="text" class="form-control" value="<?php echo $data['lokasi'];?>" readonly="readonly">
                     </div>
                   </div>
 
@@ -299,7 +325,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
                    <div class="box-body">
                      <?php
     error_reporting(E_ALL ^ E_DEPRECATED);
-    $sql    = "select * from mutasi inner join barang on mutasi.kodebarang=barang.kode where mutasi.kodebarang='$kode' order by tgl desc";
+    $sql    = "select * from mutasi inner join barang on mutasi.kodebarang=barang.no where barang.kode='$kode' order by tgl desc";
     $result = mysqli_query($conn, $sql);
     $rpp    = 5;
     $reload = "$halaman"."?pagination=true";
@@ -321,8 +347,7 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
                   <th>User</th>
                   <th>Aktivitas</th>
                   <th>Barang</th>
-                  <th>jumlah</th>
-                  <th>Stok</th>
+                  <th>Jumlah</th>
                   
                   
                 </tr>
@@ -351,7 +376,6 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
             <td><?php  echo mysqli_real_escape_string($conn, $fill['kegiatan']); ?></td>
             <td><?php  echo mysqli_real_escape_string($conn, $fill['nama']); ?></td>
              <td><?php  echo mysqli_real_escape_string($conn, $fill['jumlah']); ?></td>
-             <td><?php  echo mysqli_real_escape_string($conn, $fill['sisa']); ?></td>
                   
                 </tr>
                 <?php
@@ -379,7 +403,6 @@ if ($chmod >= 2 || $_SESSION['jabatan'] == 'admin') {
             <td><?php  echo mysqli_real_escape_string($conn, $fill['kegiatan']); ?></td>
             <td><?php  echo mysqli_real_escape_string($conn, $fill['nama']); ?></td>
             <td><?php  echo mysqli_real_escape_string($conn, $fill['jumlah']); ?></td>
-            <td><?php  echo mysqli_real_escape_string($conn, $fill['sisa']); ?></td>
             
 
             

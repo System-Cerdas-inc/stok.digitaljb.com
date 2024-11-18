@@ -205,7 +205,8 @@ if (!login_check()) {
                         <td>
 
                           <?php if ($chmod >= 4 || $_SESSION['jabatan'] == 'admin') { ?>
-                            <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='component/delete/delete_masuk?no=<?php echo $fill['no'] . '&'; ?>forward=<?php echo $forward . '&'; ?>forwardpage=<?php echo $forwardpage . '&'; ?>nota=<?php echo $fill['nota'] . '&'; ?>jumlah=<?php echo $fill['jumlah'] . '&'; ?>barcode=<?php echo $fill['barcode'] . '&'; ?>chmod=<?php echo $chmod; ?>'">BATAL</button>
+                            <button type="button" class="btn btn-danger btn-xs" onclick="form_batal('component/delete/delete_masuk?no=<?php echo $fill['no'] . '&'; ?>forward=<?php echo $forward . '&'; ?>forwardpage=<?php echo $forwardpage . '&'; ?>nota=<?php echo $fill['nota'] . '&'; ?>jumlah=<?php echo $fill['jumlah'] . '&'; ?>barcode=<?php echo $fill['barcode'] . '&'; ?>chmod=<?php echo $chmod; ?>')">BATAL</button>
+
                           <?php } else {
                           } ?>
                         </td>
@@ -225,7 +226,14 @@ if (!login_check()) {
 
 
               </div>
-
+              <script>
+                function form_batal(url) {
+                  var result = confirm("Apakah anda yakin ingin membatalkan stok masuk ?");
+                  if (result) {
+                    window.location.href = url;
+                  }
+                }
+              </script>
               <!-- /.box-body -->
             </div>
 

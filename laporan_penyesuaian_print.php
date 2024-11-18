@@ -163,8 +163,8 @@ $nota=$_GET['nota'];
     <tr bgcolor="white">
               <td align="center"><?php echo ++$no_urut;?></td>
               <td align="center"><?php  $cba =$fill['kode_brg'];
-        $r=mysqli_fetch_assoc(mysqli_query($conn,"SELECT sku,satuan FROM barang WHERE kode='$cba'"));
-       echo mysqli_real_escape_string($conn, $r['sku']); ?>
+        $r=mysqli_fetch_assoc(mysqli_query($conn,"SELECT barang_detil.*, barang.satuan FROM barang_detil INNER JOIN barang ON barang_detil.id_barang=barang.barcode WHERE id_barang='$cba'"));
+       echo mysqli_real_escape_string($conn, $r['barcode']); ?>
                         </td>
              <td><?php  echo mysqli_real_escape_string($conn, $fill['nama']); ?></td>
         <td align="center"><?php echo mysqli_real_escape_string($conn, $r['satuan']); ?></td>

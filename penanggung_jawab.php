@@ -32,7 +32,7 @@ menu();
 <?php
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 include "configuration/config_chmod.php";
-$halaman = "customer"; // halaman
+$halaman = "penanggung_jawab"; // halaman
 $dataapa = "Penanggung Jawab"; // data
 $tabeldatabase = "penanggung_jawab"; // tabel database
 $chmod = $chmenu2; // Hak akses Menu
@@ -86,7 +86,7 @@ if ($hapusberhasil == 1) {
 ?>
     <div id="myAlert"  class="alert alert-success alert-dismissible fade in" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-  <strong>Berhasil!</strong> <?php echo $dataapa;?> telah berhasil dihapus dari Data Penanggung Jawab <?php echo $dataapa;?>.
+  <strong>Berhasil!</strong> <?php echo $dataapa;?> telah berhasil dihapus dari Data <?php echo $dataapa;?>.
 </div>
 
 <!-- BOX HAPUS BERHASIL -->
@@ -135,9 +135,9 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
 ?>
                            <div class="box">
             <div class="box-header">
-            <h3 class="box-title">Data Pelanggan <span class="label label-default"><?php echo $totaldata; ?></span>
+            <h3 class="box-title">Data Penanggung Jawab <span class="label label-default"><?php echo $totaldata; ?></span>
           </h3>
-
+          <a href="add_penanggung_jawab" class="btn btn-info" role="button">Tambah</a>
         <form method="post">
         <br/>
                 <div class="input-group input-group-sm" style="width: 250px;">
@@ -213,11 +213,11 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
 
             <td>
             <?php if ($chmod >= 3 || $_SESSION['jabatan'] == 'admin') { ?>
-          <button type="button" class="btn btn-success btn-xs" onclick="window.location.href='add_<?php echo $halaman;?>?no=<?php  echo $fill['no']; ?>'">Edit</button>
+          <button type="button" class="btn btn-success btn-xs" onclick="window.location.href='edit_<?php echo $halaman;?>?no=<?php  echo $fill['no']; ?>'">Edit</button>
            <?php } else {}?>
 
            <?php  if ($chmod >= 4 || $_SESSION['jabatan'] == 'admin') { ?>
-          <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>'">Hapus</button>
+          <button type="button" class="btn btn-danger btn-xs" onclick="form_delete('component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>')">Hapus</button>
            <?php } else {}?>
               </td></tr><?php
           ;
@@ -247,11 +247,11 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
             
             <td>
             <?php if ($chmod >= 3 || $_SESSION['jabatan'] == 'admin') { ?>
-          <button type="button" class="btn btn-success btn-xs" onclick="window.location.href='add_<?php echo $halaman;?>?no=<?php  echo $fill['no']; ?>'">Edit</button>
+          <button type="button" class="btn btn-success btn-xs" onclick="window.location.href='edit_<?php echo $halaman;?>?no=<?php  echo $fill['no']; ?>'">Edit</button>
            <?php } else {}?>
 
            <?php  if ($chmod >= 4 || $_SESSION['jabatan'] == 'admin') { ?>
-             <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>'">Hapus</button>
+             <button type="button" class="btn btn-danger btn-xs" onclick="form_delete('component/delete/delete_master?no=<?php echo $fill['no'].'&'; ?>forward=<?php echo $forward.'&';?>forwardpage=<?php echo $forwardpage.'&'; ?>chmod=<?php echo $chmod; ?>')">Hapus</button>
                <?php } else {}?>
            </td></tr>
       <?php
@@ -263,10 +263,15 @@ if ($chmod >= 1 || $_SESSION['jabatan'] == 'admin') {
                   </tbody></table>
           <div align="right"><?php if($tcount>=$rpp){ echo paginate_one($reload, $page, $tpages);}else{} ?></div>
   <?php } ?>
-<div class="col-xs-1" align="right">
-          <a href="add_penanggung_jawab" class="btn btn-info" role="button">Tambah Penanggung Jawab</a>
-        </div>
                                </div>
+                               <script>
+                                function form_delete(url){
+                                  var result = confirm("Apakah anda yakin ingin menghapus data ini ?");
+                                  if (result) {
+                                    window.location.href = url;
+                                  }
+                                }
+                               </script>
                                 <!-- /.box-body -->
                             </div>
 
