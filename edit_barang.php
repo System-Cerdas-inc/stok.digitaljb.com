@@ -627,7 +627,7 @@ if (!login_check()) {
 <script src="dist/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <script src="dist/plugins/jQuery/jquery-ui.min.js"></script>
 
-<script type="text/javascript" src="https://unpkg.com/@zxing/library@latest/umd/index.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     table_show();
