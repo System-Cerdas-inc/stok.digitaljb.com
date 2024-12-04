@@ -318,7 +318,7 @@ if (!login_check()) {
           ?>
         <?php
       } else { ?>
-          <div class="col-md-6">
+          <div class="col-lg-6">
 
           <?php } ?>
           <!-- Box Comment -->
