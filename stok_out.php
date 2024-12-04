@@ -285,6 +285,33 @@ if (!login_check()) {
                             <?php } ?>
                           </div>
                         <?php } ?>
+                        <div class="form-group col-md-12 col-xs-12">
+                          <label for="barang" class="col-sm-2 control-label">Mode</label>
+                          <div class="col-sm-10">
+                            <select class="form-control" id="mode_isi" style="width: 100%;">
+                              <option value="0" selected="selected">Berd. Barcode / SN</option>
+                              <option value="1">Langsung Pilih Barang</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12 col-xs-12 hidden" id="choose_barang_available">
+                          <label for="barang" class="col-sm-2 control-label">Pilih Barang:</label>
+                          <div class="col-sm-7">
+                            <select class="form-control select2" name="find_by_produk" id="find_by_produk" style="width: 100%;">
+                              <option value="" selected="selected">Pilih Barang</option>
+                              <?php
+                              error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+                              $sql = mysqli_query($conn, "SELECT a.kode, a.nama, a.hargabeli, a.hargajual, a.sisa, a.sku, b.barcode FROM barang a LEFT JOIN barang_detil b ON a.barcode = b.id_barang;");
+                              while ($row = mysqli_fetch_assoc($sql)) {
+                                echo "<option value='" . $row['barcode'] . "' nama='" . $row['nama'] . "' hargabeli='" . $row['hargabeli'] . "' hargajual='" . $row['hargajual'] . "' kode='" . $row['kode'] . "' stok='" . $row['sisa'] . "'>" . $row['barcode'] . " | " . $row['nama'] . "</option>";
+                              }
+                              ?>
+                            </select>
+                          </div>
+                          <div class="col-sm-3" id="btn_aksi_pilih">
+                            <button type="submit" name="find_by_barang" class="btn btn-info btn-block">Pilih</button>
+                          </div>
+                        </div>
                         <div class="form-group col-md-12 col-xs-12" id="cari_barcode">
                           <label for="label_barcode" id="label_barcode" class="col-sm-2 control-label">Barcode / SN:</label>
                           <div class="col-sm-8">
@@ -646,6 +673,32 @@ if (!login_check()) {
     $("#stok_detil").val(jumlah_keluar);
 
     $("#jumlah").val(1);
+  });
+
+  $("#mode_isi").on("change", function() {
+    let nilai_mode = $(this).val();
+
+    if(nilai_mode == "1") {
+      let this_checked = $('#new_sn').is(":checked");
+      if (this_checked) {
+        $('#new_sn').prop('checked', false);
+        $('#choose_barang').addClass("hidden");
+      }
+
+      $('#choose_barang_bc').addClass("hidden");
+      $('#cari_barcode').addClass("hidden");
+      $('#choose_barang_available').removeClass("hidden");
+    } else {
+      $('#choose_barang_bc').removeClass("hidden");
+      $('#cari_barcode').removeClass("hidden");
+      $('#choose_barang_available').addClass("hidden");
+    }
+  });
+  
+  $("#find_by_produk").on("change", function() {
+    let nilai_bc = $(this).val();
+
+    $("#barcode").val(nilai_bc);
   });
 
   $("#new_sn").on("change", function() {

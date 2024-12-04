@@ -177,7 +177,7 @@ if (!login_check()) {
                       <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
                           <div class="row">
-                            <div class="col-xs-7">
+                            <div class="col-lg-7">
                               <span style="display:none"><input style="width:400px" class="form-control" type="text" id="id_barang"></span>
                               <table class="table">
                                 <tr>
@@ -282,7 +282,7 @@ if (!login_check()) {
 
                               </table>
                             </div>
-                            <div class="col-xs-5">
+                            <div class="col-lg-5">
                               <table class="table">
 
 
@@ -311,14 +311,14 @@ if (!login_check()) {
                                   </tr>
 
                                   <tr>
-                                    <td>Stok Minimal</td>
-                                    <td>:</td>
+                                    <td style="width:150px">Stok Minimal</td>
+                                    <td style="width:10px">:</td>
                                     <td><input class="form-control" name="stok_minimal" type="number" min="1" value="1" required>
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td>Barcode</td>
-                                    <td>:</td>
+                                    <td style="width:150px">Barcode</td>
+                                    <td style="width:10px">:</td>
                                     <td><input class="form-control" name="barcode" value="BRG<?php echo autoNumber(); ?>" required readonly> </td>
                                   </tr>
                                 <?php } ?>
@@ -353,11 +353,11 @@ if (!login_check()) {
                           <div class="row">
                             <div class="col-md-6 col-sm-12">
 
-                              <div class="row" style="padding-bottom: 25px;">
-                                <div class="col-sm-6">
+                              <div class="row">
+                                <div class="col-sm-6" style="padding-bottom: 15px;">
                                   <button class="btn btn-info btn-block" type="button" id="startButton">Open Kamera</button>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6" style="padding-bottom: 15px;">
                                   <button class="btn btn-info btn-block" type="button" id="resetButton">Reset</button>
                                 </div>
                               </div>
@@ -382,8 +382,8 @@ if (!login_check()) {
                               <div id="button-act-sn">
                                 <button class="btn btn-primary" type="button" onclick="tambah_barcode();">Input Serial Number</button>
                               </div>
-                              <div class="table-responsive">
-                                <table class="table table-dark table-hover" style="width: 100%; margin-top: 20px;">
+                              <div class="table-responsive" style="width: 100%; margin-top: 20px;">
+                                <table class="table table-dark table-hover">
                                   <thead>
                                     <tr>
                                       <th>No</th>
