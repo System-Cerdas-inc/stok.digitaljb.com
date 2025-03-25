@@ -1,0 +1,23 @@
+.user-panel {
+    padding: 25px 10px;
+}
+
+.nav-tabs-custom {
+    margin-bottom: 0px;
+    background: #fff;
+    border-radius: 3px;
+}
+
+.select2-container .select2-selection--single {
+    height: 34px;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding-left: 0;
+}
+
+@media screen and (max-width: 767px) {
+    div#main {
+        padding: 15px;
+    }
+}
